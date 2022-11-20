@@ -84,7 +84,10 @@ const NavMenu: React.FC = () => {
           {menuLinks.map(({ link, text, sum, src }, i) => {
             return (
               <React.Fragment key={`menu-${i}`}>
-                <li className="nav-li relative flex-1 transition-all duration-300">
+                <li
+                  className="nav-li relative flex-1 transition-all duration-300"
+                  onClick={() => setMenu("close")}
+                >
                   <Link
                     to={link}
                     className="nav-link flex items-start justify-center flex-col px-4 gap-2 h-full transition-all duration-300 hover:bg-gradient-to-b from-transparent via-transparent to-zinc-500/70"
