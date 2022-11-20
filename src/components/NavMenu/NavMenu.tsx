@@ -17,21 +17,25 @@ const NavMenu: React.FC = () => {
       link: "/",
       text: "Home",
       sum: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has",
+      src: "/assets/home.png",
     },
     {
       link: "/ticket",
       text: "Buy Tickets",
       sum: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has",
+      src: "/assets/tickets.png",
     },
     {
       link: "/results",
       text: "Results",
       sum: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has",
+      src: "/assets/results.png",
     },
     {
       link: "/about",
       text: "About",
       sum: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has",
+      src: "/assets/about.png",
     },
   ];
 
@@ -44,7 +48,7 @@ const NavMenu: React.FC = () => {
         )}
       >
         <button onClick={() => setMenu("open")}>
-          <DotsVertical className="w-[24px] h-[24px] hover:fill-ss-orange-500" />
+          <DotsVertical className="w-[24px] h-[24px]" />
         </button>
         <Link to="/" className="flex items-center justify-center">
           <Logo className="logo" />
@@ -77,21 +81,26 @@ const NavMenu: React.FC = () => {
           >
             <Cross className="h-[24px] w-[24px] hover:fill-orange-500" />
           </button>
-          {menuLinks.map(({ link, text, sum }, i) => {
+          {menuLinks.map(({ link, text, sum, src }, i) => {
             return (
               <React.Fragment key={`menu-${i}`}>
-                <li className="nav-li relative flex-1 transition-all">
+                <li className="nav-li relative flex-1 transition-all duration-300">
                   <Link
                     to={link}
-                    className="nav-link flex items-start justify-center flex-col px-4 gap-2 h-full transition-all hover:bg-gradient-to-b from-transparent via-transparent to-zinc-500/70"
+                    className="nav-link flex items-start justify-center flex-col px-4 gap-2 h-full transition-all duration-300 hover:bg-gradient-to-b from-transparent via-transparent to-zinc-500/70"
                   >
-                    <p className="nav-link-text text-3xl font-bold transition-all ">
+                    <img
+                      className="nav-link-img opacity-0 transition-all w-[4rem] duration-300"
+                      alt={link}
+                      src={src}
+                    />
+                    <p className="nav-link-text text-3xl font-bold transition-all duration-300">
                       {text}
                     </p>
-                    <p className="nav-link-sum text-sm text-zinc-400 transition-all">
+                    <p className="nav-link-sum text-sm text-zinc-400 transition-all duration-300">
                       {sum}
                     </p>
-                    <button className="nav-link-button border border-zinc-600 p-2 rounded-full transition-all">
+                    <button className="nav-link-button border border-zinc-600 p-2 rounded-full transition-all duration-300">
                       <ArrowRight className="fill-white w-6 h-6" />
                     </button>
                   </Link>

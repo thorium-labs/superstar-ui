@@ -16,6 +16,10 @@
     top: 0;
 }
 
+.nav-link:hover .nav-link-img {
+    opacity: 100%;
+}
+
 .nav-link:hover .nav-link-text {
     color:theme('colors.ss-orange-500')
 }
