@@ -11,11 +11,11 @@
       }
     </style>
     <linearGradient id="linear-gradient" x1="-50.58" y1="120.62" x2="43.81" y2="66.12" gradientUnits="userSpaceOnUse">
-      <stop offset=".72" stop-color="#f05a24"/>
+      <stop offset=".72" stop-color="#f97316"/>
       <stop offset="1" stop-color="#faaf3b"/>
     </linearGradient>
     <linearGradient id="linear-gradient-2" x1="44.83" y1="55.29" x2="141.7" y2="-.64" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#f05a24"/>
+      <stop offset="0" stop-color="#f97316"/>
       <stop offset=".6" stop-color="#faaf3b"/>
     </linearGradient>
   </defs>
