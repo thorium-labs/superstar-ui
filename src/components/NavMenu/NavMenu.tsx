@@ -52,10 +52,10 @@ const NavMenu: React.FC = () => {
         </button>
         <Link to="/" className="flex items-center justify-center">
           <Logo className="logo" />
-          <p className="text-xl">
+          <h2 className="text-xl">
             <span className="text-ss-orange-500">SUPER</span>
             <span className="text-orange-500">STAR</span>
-          </p>
+          </h2>
         </Link>
         {clientAddr ? (
           <LinkButton onClick={disconnectWallet}>
