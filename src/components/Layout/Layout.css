@@ -1,0 +1,5 @@
+.open + .nav,
+.open + .main,
+.open + .footer {
+    filter: blur(12px);
+}
