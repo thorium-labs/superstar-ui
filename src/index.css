@@ -6,5 +6,6 @@
     min-height: 100vh;
     overflow: auto;
     overflow-x: hidden;
-    background: theme('colors.gray.800');
+    background: theme('colors.zinc.800');
+    color:theme('colors.zinc.50');
 }
