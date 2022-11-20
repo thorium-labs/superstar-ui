@@ -1,15 +1,16 @@
 import clsx from "clsx";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { useAppContext } from "../../providers/AppProvider";
 import { LinkButton } from "../Buttons";
-import { Logo } from "../Icons";
-import ArrowRight from "../Icons/ArrowRight";
-import Cross from "../Icons/Cross";
-import DotsVertical from "../Icons/DotsVertical";
+import { ArrowRight, Cross, DotsVertical, Logo } from "../Icons";
+import Connect from "../Icons/Connect";
+import Disconnect from "../Icons/Disconnect";
 import "./NavMenu.css";
 
 const NavMenu: React.FC = () => {
-  const [menu, setMenu] = useState<"open" | "close">("open");
+  const [menu, setMenu] = useState<"open" | "close">("close");
+  const { connectWallet, clientAddr, disconnectWallet } = useAppContext();
 
   const menuLinks = [
     {
@@ -43,7 +44,7 @@ const NavMenu: React.FC = () => {
         )}
       >
         <button onClick={() => setMenu("open")}>
-          <DotsVertical className="w-[24px] h-[24px]" />
+          <DotsVertical className="w-[24px] h-[24px] hover:fill-ss-orange-500" />
         </button>
         <Link to="/" className="flex items-center justify-center">
           <Logo className="logo" />
@@ -52,7 +53,15 @@ const NavMenu: React.FC = () => {
             <span className="text-orange-500">STAR</span>
           </p>
         </Link>
-        <LinkButton>Connect Wallet</LinkButton>
+        {clientAddr ? (
+          <LinkButton onClick={disconnectWallet}>
+            <Disconnect className="w-[24px] h-[24px] hover:fill-ss-orange-500" />
+          </LinkButton>
+        ) : (
+          <LinkButton onClick={connectWallet}>
+            <Connect className="w-[26px] h-[26px] hover:fill-ss-orange-500" />
+          </LinkButton>
+        )}
       </nav>
       <div
         className={clsx(

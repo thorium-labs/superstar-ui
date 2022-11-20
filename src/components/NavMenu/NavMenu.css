@@ -26,5 +26,5 @@
 
 .nav-link:hover .nav-link-button{
     background: linear-gradient(to right, theme('colors.ss-orange-500'), theme('colors.orange.500'));
-    border-color: transparent;
+    border: none;
 }

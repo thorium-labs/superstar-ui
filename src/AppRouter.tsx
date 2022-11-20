@@ -2,9 +2,9 @@ import React from "react";
 import { HashRouter, Route, Routes } from "react-router-dom";
 import Layout from "./components/Layout";
 
-const Home = React.lazy(() => import("./pages/Home"));
-const BuyTicket = React.lazy(() => import("./pages/BuyTicket"));
-const About = React.lazy(() => import("./pages/About"));
+const Home = React.lazy(() => import("./modules/Home"));
+const BuyTicket = React.lazy(() => import("./modules/BuyTicket"));
+const About = React.lazy(() => import("./modules/About"));
 
 const AppRouter: React.FC = () => {
   return (
