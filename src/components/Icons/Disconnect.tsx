@@ -1,7 +1,8 @@
 import React from "react";
-import { IconProps } from "./IconProps";
 
-const Disconnect: React.FC<IconProps> = ({ className }) => {
+const Disconnect: React.FC<React.SVGAttributes<HTMLOrSVGElement>> = ({
+  ...props
+}) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -11,7 +12,7 @@ const Disconnect: React.FC<IconProps> = ({ className }) => {
       stroke="currentColor"
       strokeWidth="0"
       viewBox="0 0 1024 1024"
-      className={className}
+      {...props}
     >
       <path
         stroke="none"

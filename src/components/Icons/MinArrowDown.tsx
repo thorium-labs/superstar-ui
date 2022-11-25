@@ -1,6 +1,6 @@
 import React from "react";
 
-const ArrowRight: React.FC<React.SVGAttributes<HTMLOrSVGElement>> = ({
+const MinArrowDown: React.FC<React.SVGAttributes<HTMLOrSVGElement>> = ({
   ...props
 }) => {
   return (
@@ -11,12 +11,12 @@ const ArrowRight: React.FC<React.SVGAttributes<HTMLOrSVGElement>> = ({
       fill="currentColor"
       stroke="currentColor"
       strokeWidth="0"
-      viewBox="0 0 24 24"
+      viewBox="0 0 512 512"
       {...props}
     >
-      <path d="M10.707 17.707L16.414 12l-5.707-5.707-1.414 1.414L13.586 12l-4.293 4.293z"></path>
+      <path stroke="none" d="M128 192l128 128 128-128z"></path>
     </svg>
   );
 };
 
-export default ArrowRight;
+export default MinArrowDown;

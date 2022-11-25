@@ -1,7 +1,8 @@
 import React from "react";
-import { IconProps } from "./IconProps";
 
-const Logo: React.FC<IconProps> = ({ className }) => {
+const Logo: React.FC<React.SVGAttributes<HTMLOrSVGElement>> = ({
+  ...props
+}) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -9,7 +10,7 @@ const Logo: React.FC<IconProps> = ({ className }) => {
       viewBox="0 0 115.95 105.38"
       height="100%"
       width="100%"
-      className={className}
+      {...props}
     >
       <defs>
         <linearGradient
