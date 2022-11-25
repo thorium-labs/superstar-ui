@@ -1,63 +1,53 @@
-export const malaga_testnet = {
-  chainId: "malaga-420",
-  chainName: "Wasm (malaga-420)",
-  addressPrefix: "wasm",
-  rpcUrl: "https://rpc.malaga-420.cosmwasm.com:443",
-  httpUrl: "https://api.malaga-420.cosmwasm.com",
-  feeToken: "umlg",
-  stakingToken: "uand",
-  coinMap: {
-    umlg: { denom: "MLG", fractionalDigits: 6 },
-    uand: { denom: "AND", fractionalDigits: 6 },
-  },
-  gasPrice: 0.04,
-};
-
-const juno_prod = {
-  chainId: "juno-1",
-  chainName: "Juno",
-  addressPrefix: "juno",
-  rpcUrl: "https://rpc-juno.itastakers.com/",
-  httpUrl: "https://lcd-juno.itastakers.com/",
-  feeToken: "ujuno",
-  stakingToken: "ujuno",
-  coinMap: {
-    ujunox: { denom: "JUNO", fractionalDigits: 6 },
-  },
-  gasPrice: 0.025,
-};
-
 const juno_testnet = {
   chainId: "uni-5",
   chainName: "Juno Testnet",
-  addressPrefix: "juno",
+  bech32Prefix: "juno",
   rpcUrl: "https://rpc.uni.juno.deuslabs.fi:443",
-  httpUrl: "https://lcd.uni.juno.deuslabs.fi",
-  feeToken: "ujunox",
-  stakingToken: "ujunox",
-  coinMap: {
-    ujunox: { denom: "JUNOX", fractionalDigits: 6 },
+  restUrl: "https://lcd.uni.juno.deuslabs.fi",
+  bip44: {
+    coinType: 118,
   },
-  gasPrice: 0.025,
+  feeToken: "ujunox",
+  coinMap: {
+    ujunox: {
+      denom: "JUNOX",
+      coinDecimals: 6,
+    },
+  },
+  stakingToken: "ujunox",
+  defaultGasPrice: 0.04,
+  gasPriceStep: {
+    low: 0.03,
+    average: 0.04,
+    high: 0.05,
+  },
 };
 
-const juno_local = {
-  chainId: "testing",
-  chainName: "Juno Local",
-  addressPrefix: "juno",
-  rpcUrl: "http://localhost:26657",
-  httpUrl: "http://localhost:1317",
-  feeToken: "ujunox",
-  stakingToken: "ujunox",
-  coinMap: {
-    ujunox: { denom: "JUNOX", fractionalDigits: 6 },
+const osmosis_testnet = {
+  chainId: "osmo-test-4",
+  chainName: "Osmosis Testnet",
+  bech32Prefix: "osmo",
+  rpcUrl: "https://rpc-v13-devnet.osmosis.zone/",
+  restUrl: "https://testnet-rest.osmosis.zone/",
+  bip44: {
+    coinType: 118,
   },
-  gasPrice: 0.025,
+  feeToken: "uosmo",
+  coinMap: {
+    uosmo: {
+      denom: "OSMO",
+      coinDecimals: 6,
+    },
+  },
+  stakingToken: "uosmo",
+  defaultGasPrice: 0.025,
+  gasPriceStep: {
+    low: 0,
+    average: 0.025,
+    high: 0.04,
+  },
 };
 
-export const chainsConfig = {
-  malaga_testnet,
-  juno_prod,
-  juno_testnet,
-  juno_local,
-};
+export const chainsConfig = { osmosis_testnet, juno_testnet };
+export type Chain = typeof chainsConfig[keyof typeof chainsConfig];
+export type Chains = keyof typeof chainsConfig;
