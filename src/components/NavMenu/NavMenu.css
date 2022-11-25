@@ -25,10 +25,15 @@
 }
 
 .nav-link:hover .nav-link-sum {
-    color:theme('colors.zinc.50')
+    color:theme('colors.stone.50')
 }
 
-.nav-link:hover .nav-link-button{
+.nav-link:hover .nav-link-button {
     background: linear-gradient(to right, theme('colors.ss-orange-500'), theme('colors.orange.500'));
     border: none;
+}
+
+.disconnect-button:hover .disconnect-text {
+    opacity: 1;
+    width: calc(100% - 4px);
 }

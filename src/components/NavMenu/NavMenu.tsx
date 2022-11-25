@@ -1,16 +1,22 @@
+import { coin } from "@cosmjs/proto-signing";
 import clsx from "clsx";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { useAppContext } from "../../providers/AppProvider";
-import { LinkButton } from "../Buttons";
-import { ArrowRight, Cross, DotsVertical, Logo } from "../Icons";
-import Connect from "../Icons/Connect";
+import { useStargate } from "../../providers/StargateProvider";
+import { useWallet } from "../../providers/WalletProvider";
+import { GradientButton } from "../Buttons";
+import { ArrowRight, Cross, Logo } from "../Icons";
 import Disconnect from "../Icons/Disconnect";
+import MenuSpan from "../Icons/MenuSpan";
+import NotificacionIcon from "../Icons/NotificationIcon";
+import TextOutline from "../TextOutline";
 import "./NavMenu.css";
 
 const NavMenu: React.FC = () => {
   const [menu, setMenu] = useState<"open" | "close">("close");
-  const { connectWallet, clientAddr, disconnectWallet } = useAppContext();
+  const [notification, setNotification] = useState<string[]>([]);
+  const { connectWallet, disconnectWallet, address } = useWallet();
+  const { balance } = useStargate();
 
   const menuLinks = [
     {
@@ -43,13 +49,10 @@ const NavMenu: React.FC = () => {
     <>
       <nav
         className={clsx(
-          "nav min-h-8 p-4 flex items-center justify-between w-full bg-zinc-900 sticky top-0 z-20",
+          "nav min-h-8 py-4 px-12 flex items-center justify-between w-full bg-transparent sticky top-0 z-20",
           menu === "open" && "blur-md"
         )}
       >
-        <button onClick={() => setMenu("open")}>
-          <DotsVertical className="w-[24px] h-[24px]" />
-        </button>
         <Link to="/" className="flex items-center justify-center">
           <Logo className="logo" />
           <h2 className="text-xl">
@@ -57,19 +60,41 @@ const NavMenu: React.FC = () => {
             <span className="text-orange-500">STAR</span>
           </h2>
         </Link>
-        {clientAddr ? (
-          <LinkButton onClick={disconnectWallet}>
-            <Disconnect className="w-[24px] h-[24px] hover:fill-ss-orange-500" />
-          </LinkButton>
-        ) : (
-          <LinkButton onClick={connectWallet}>
-            <Connect className="w-[26px] h-[26px] hover:fill-ss-orange-500" />
-          </LinkButton>
-        )}
+        <div className="flex gap-4">
+          {address ? (
+            <button
+              className="disconnect-button outline-none relative"
+              onClick={disconnectWallet}
+            >
+              <TextOutline className="min-w-[7.6rem] text-center">
+                <span>{balance?.amount}</span>
+                <span className="uppercase">{balance?.denom.slice(1)}</span>
+              </TextOutline>
+              <span className="disconnect-text opacity-0 absolute bg-ss-bg rounded-[10px] py-1 px-2 top-[2px] left-[2px] transition-all">
+                Disconnect
+              </span>
+            </button>
+          ) : (
+            <GradientButton onClick={connectWallet} className="min-w-[7.6rem]">
+              Connect Wallet
+            </GradientButton>
+          )}
+          <button className="relative flex items-center justify-center ">
+            <NotificacionIcon className="w-[22px] h-[22px] hover:fill-ss-orange-500" />
+            {notification.length ? (
+              <span className="absolute block bg-gradient-to-bl from-ss-orange-500 to-orange-500 h-2 w-2 top-[2px] right-[-3px] rounded-full" />
+            ) : (
+              ""
+            )}
+          </button>
+          <button onClick={() => setMenu("open")} className="outline-none ">
+            <MenuSpan className="w-[28px] h-[28px] hover:stroke-ss-orange-500" />
+          </button>
+        </div>
       </nav>
       <div
         className={clsx(
-          "absolute z-30 h-screen w-screen bg-zinc-700/50",
+          "absolute z-30 h-screen w-screen bg-stone-700/50",
           menu,
           menu == "open" ? "flex" : "hidden"
         )}
@@ -77,7 +102,7 @@ const NavMenu: React.FC = () => {
         <ul className={clsx("relative w-full h-full z-40 flex")}>
           <button
             onClick={() => setMenu("close")}
-            className="border border-zinc-50 rounded-full absolute top-5 left-5 p-2 z-40 hover:border-orange-500"
+            className="border border-stone-50 rounded-full absolute top-5 right-5 p-2 z-40 hover:border-orange-500"
           >
             <Cross className="h-[24px] w-[24px] hover:fill-orange-500" />
           </button>
@@ -90,7 +115,7 @@ const NavMenu: React.FC = () => {
                 >
                   <Link
                     to={link}
-                    className="nav-link flex items-start justify-center flex-col px-4 gap-2 h-full transition-all duration-300 hover:bg-gradient-to-b from-transparent via-transparent to-zinc-500/70"
+                    className="nav-link flex items-start justify-center flex-col px-4 gap-2 h-full transition-all duration-300 hover:bg-gradient-to-b from-transparent via-transparent to-stone-500/70"
                   >
                     <img
                       className="nav-link-img opacity-0 transition-all w-[4rem] duration-300"
@@ -100,16 +125,16 @@ const NavMenu: React.FC = () => {
                     <p className="nav-link-text text-3xl font-bold transition-all duration-300">
                       {text}
                     </p>
-                    <p className="nav-link-sum text-sm text-zinc-400 transition-all duration-300">
+                    <p className="nav-link-sum text-sm text-stone-400 transition-all duration-300">
                       {sum}
                     </p>
-                    <button className="nav-link-button border border-zinc-600 p-2 rounded-full transition-all duration-300">
+                    <button className="nav-link-button border border-stone-600 p-2 rounded-full transition-all duration-300">
                       <ArrowRight className="fill-white w-6 h-6" />
                     </button>
                   </Link>
                 </li>
                 {i != menuLinks.length - 1 && (
-                  <span className="block h-full w-[1px] bg-zinc-600/50" />
+                  <span className="block h-full w-[1px] bg-stone-600/50" />
                 )}
               </React.Fragment>
             );
