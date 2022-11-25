@@ -12,7 +12,7 @@ const GradientButton: React.FC<PropsWithChildren<ButtonAttributes>> = ({
     <button
       className={clsx(
         className,
-        `min-w-fit bg-gradient-to-bl outline-none from-ss-orange-500 to-orange-500 py-1 px-2 rounded-lg text-slate-800 font-extrabold hover:filter hover:brightness-110 transition-all`
+        `bg-gradient-to-bl outline-none from-ss-orange-500 to-orange-500 py-1 px-2 rounded-lg text-stone-800 font-semibold hover:filter hover:brightness-110 transition-all`
       )}
       {...props}
     >
