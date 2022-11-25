@@ -15,6 +15,7 @@ module.exports = {
         "ss-orange-700": "#B36C1D",
         "ss-orange-800": "#905012",
         "ss-orange-900": "#773B0B",
+        "ss-bg": "#1c1917",
       }
     },
   },

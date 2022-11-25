@@ -8,8 +8,8 @@
     min-height: 100vh;
     overflow: auto;
     overflow-x: hidden;
-    background: theme('colors.zinc.800');
-    color:theme('colors.zinc.50');
+    background-color: theme('colors.ss-bg');
+    color:theme('colors.stone.50');
     font-family: 'Barlow', sans-serif;
 }
 
