@@ -82,8 +82,14 @@ const BuyTicket: React.FC = () => {
         </div>
         <GradientButton>Pay now</GradientButton>
       </div>
-      <span className="bubble animate-floating h-[6rem] w-[6rem] rounded-full bg-gradient-to-bl from-ss-orange-500 to-orange-500 absolute top-[2rem] right-[4rem]" />
-      <span className="bubble h-[3rem] w-[3rem] rounded-full bg-gradient-to-bl from-ss-orange-500 to-orange-500 absolute top-[5rem] right-[1rem] z-20" />
+      <img
+        src="assets/orange-ball.png"
+        className="bubble animate-floating h-[6rem] w-[6rem] absolute top-[2rem] right-[4rem]"
+      />
+      <img
+        src="assets/ss-orange-ball.png"
+        className="bubble h-[4rem] w-[4rem] rounded-full absolute top-[5rem] right-[1rem] z-20"
+      />
     </div>
   );
 };
