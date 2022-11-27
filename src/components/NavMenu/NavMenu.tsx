@@ -1,12 +1,10 @@
-import { coin } from "@cosmjs/proto-signing";
 import clsx from "clsx";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useStargate } from "../../providers/StargateProvider";
 import { useWallet } from "../../providers/WalletProvider";
 import { GradientButton } from "../Buttons";
 import { ArrowRight, Cross, Logo } from "../Icons";
-import Disconnect from "../Icons/Disconnect";
 import MenuSpan from "../Icons/MenuSpan";
 import NotificacionIcon from "../Icons/NotificationIcon";
 import TextOutline from "../TextOutline";
@@ -47,10 +45,10 @@ const NavMenu: React.FC = () => {
 
   return (
     <>
+      <div className="min-h-[72px] w-full h-full" />
       <nav
         className={clsx(
-          "nav min-h-8 py-4 px-12 flex items-center justify-between w-full bg-transparent sticky top-0 z-20",
-          menu === "open" && "blur-md"
+          "nav min-h-8 py-4 px-12 flex items-center justify-between w-full bg-transparent fixed top-0 z-40 backdrop-blur"
         )}
       >
         <Link to="/" className="flex items-center justify-center">
@@ -94,12 +92,12 @@ const NavMenu: React.FC = () => {
       </nav>
       <div
         className={clsx(
-          "absolute z-30 h-screen w-screen bg-stone-700/50",
+          "fixed z-50 h-screen w-screen bg-stone-700/50 backdrop-blur-lg",
           menu,
           menu == "open" ? "flex" : "hidden"
         )}
       >
-        <ul className={clsx("relative w-full h-full z-40 flex")}>
+        <ul className={clsx("relative w-full h-full flex")}>
           <button
             onClick={() => setMenu("close")}
             className="border border-stone-50 rounded-full absolute top-5 right-5 p-2 z-40 hover:border-orange-500"
