@@ -49,47 +49,50 @@ const BuyTicket: React.FC = () => {
             : null}
         </div>
       </div>
-      <div className="p-4 bg-stone-700/30 backdrop-blur flex-1 rounded-xl h-fit flex flex-col gap-4 z-10">
-        <h2 className="text-3xl font-bold">Payment</h2>
-        <span className="block bg-stone-500 w-full h-[2px] rounded-lg" />
-        <div className="flex justify-between">
-          <div>
-            <p>Ticket price</p>
-            <p className="text-stone-400 uppercase text-xs">lottery 1</p>
+      <div className="sticky top-[9rem] flex-1 h-fit">
+        <div className="p-4 bg-stone-700/30 backdrop-blur rounded-xl h-fit flex flex-col gap-4 z-10 absolute w-full">
+          <h2 className="text-3xl font-bold">Payment</h2>
+          <span className="block bg-stone-500 w-full h-[2px] rounded-lg" />
+          <div className="flex justify-between">
+            <div>
+              <p>Ticket price</p>
+              <p className="text-stone-400 uppercase text-xs">lottery 1</p>
+            </div>
+            <div>
+              <p className="uppercase">
+                2 <span className="text-ss-orange-500">OSMO</span>
+              </p>
+              <p className="text-stone-400 text-xs text-right">x1</p>
+            </div>
           </div>
-          <div>
+          <div className="flex justify-between">
+            <div>
+              <p>Nº Tickets</p>
+              <p className="text-stone-400 text-xs">x{ticketAmount}</p>
+            </div>
+            <p>x{ticketAmount}</p>
+          </div>
+          <span className="block bg-stone-500 w-full h-[2px] rounded-lg" />
+          <div className="flex justify-between">
+            <div>
+              <p className="uppercase text-xl">Total</p>
+            </div>
             <p className="uppercase">
-              2 <span className="text-ss-orange-500">OSMO</span>
+              {ticketAmount * 2}{" "}
+              <span className="text-ss-orange-500">OSMO</span>
             </p>
-            <p className="text-stone-400 text-xs text-right">x1</p>
           </div>
+          <GradientButton>Pay now</GradientButton>
         </div>
-        <div className="flex justify-between">
-          <div>
-            <p>Nº Tickets</p>
-            <p className="text-stone-400 text-xs">x{ticketAmount}</p>
-          </div>
-          <p>x{ticketAmount}</p>
-        </div>
-        <span className="block bg-stone-500 w-full h-[2px] rounded-lg" />
-        <div className="flex justify-between">
-          <div>
-            <p className="uppercase text-xl">Total</p>
-          </div>
-          <p className="uppercase">
-            {ticketAmount * 2} <span className="text-ss-orange-500">OSMO</span>
-          </p>
-        </div>
-        <GradientButton>Pay now</GradientButton>
+        <img
+          src="assets/orange-ball.png"
+          className="bubble animate-floating h-[6rem] w-[6rem] absolute top-[-4rem] right-[4rem]"
+        />
+        <img
+          src="assets/ss-orange-ball.png"
+          className="bubble h-[4rem] w-[4rem] rounded-full absolute top-[-2rem] right-[1rem] z-20"
+        />
       </div>
-      <img
-        src="assets/orange-ball.png"
-        className="bubble animate-floating h-[6rem] w-[6rem] absolute top-[2rem] right-[4rem]"
-      />
-      <img
-        src="assets/ss-orange-ball.png"
-        className="bubble h-[4rem] w-[4rem] rounded-full absolute top-[5rem] right-[1rem] z-20"
-      />
     </div>
   );
 };
