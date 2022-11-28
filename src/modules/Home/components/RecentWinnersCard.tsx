@@ -3,7 +3,7 @@ import { IntlAddress } from "../../../utils/intl";
 
 const RecentWinnersCard: React.FC = () => {
   return (
-    <div className="bg-stone-700/60 rounded-lg flex flex-col p-4 gap-2 relative mt-[2rem]">
+    <div className="bg-stone-700/60 rounded-lg flex flex-col p-4 gap-2 relative mt-[2rem] min-h-[100px]">
       <div className="absolute right-[1rem] top-[-2rem]">
         <img
           src="assets/ss-orange-star-front.png"

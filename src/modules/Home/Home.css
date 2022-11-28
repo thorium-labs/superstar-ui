@@ -1,0 +1,7 @@
+.draw-number {
+    transform: rotate3d(5, -15, 0, 40deg);
+   /*  transform: rotate3d(-4, 8, 0, 40deg); */
+    left: 26px;
+    min-width: 45px;
+    top: 31px;
+}

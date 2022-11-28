@@ -5,7 +5,7 @@ import { useWallet } from "../../../providers/WalletProvider";
 const DrawPresent: React.FC = () => {
   const { chainInfo } = useWallet();
   return (
-    <div className="relative w-full min-h-[160px] mt-[2rem] mb-[10rem]">
+    <div className="relative w-full min-h-[160px] mt-[2rem] mb-[3rem]">
       <div className="py-4 px-12 rounded-xl bg-stone-700/20 backdrop-blur w-full mx-auto flex gap-4 items-center justify-between min-h-[10rem] absolute z-20">
         <div className="min-w-[200px] flex flex-col items-center gap-2">
           <div>
@@ -38,7 +38,7 @@ const DrawPresent: React.FC = () => {
       </div>
       <img
         src="/assets/orange-ball.png"
-        className="w-[7rem] absolute top-[-3rem] left-[-2.5rem] animate-floating"
+        className="w-[7rem] absolute top-[-3rem] left-[-2.5rem] animate-floating-2"
       />
       <img
         src="/assets/ss-orange-star-front.png"
@@ -70,7 +70,7 @@ const DrawPresent: React.FC = () => {
       />
       <img
         src="/assets/ss-orange-ball.png"
-        className="w-[5rem] absolute top-[7rem] right-[1rem] animate-floating"
+        className="w-[5rem] absolute top-[7rem] right-[1rem] animate-floating-2"
       />
     </div>
   );
