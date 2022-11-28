@@ -23,7 +23,7 @@ const BuyTicketContainer: React.FC<Props> = ({
   return (
     <div className="flex relative">
       <div className="p-2 min-w-[15rem] rounded-xl flex items-center justify-center flex-col bg-stone-700/30 backdrop-blur">
-        <p className="font-bold text-xs text-stone-100">LOTTERY</p>
+        <p className="font-bold text-xs text-stone-100">DRAW</p>
         <p className="text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-ss-orange-500/80 to-orange-500/80">
           1
         </p>

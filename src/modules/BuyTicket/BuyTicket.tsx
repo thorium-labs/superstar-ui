@@ -56,19 +56,17 @@ const BuyTicket: React.FC = () => {
           <div className="flex justify-between">
             <div>
               <p>Ticket price</p>
-              <p className="text-stone-400 uppercase text-xs">lottery 1</p>
+              <p className="text-stone-400 uppercase text-xs">Draw 1</p>
             </div>
             <div>
               <p className="uppercase">
                 2 <span className="text-ss-orange-500">OSMO</span>
               </p>
-              <p className="text-stone-400 text-xs text-right">x1</p>
             </div>
           </div>
           <div className="flex justify-between">
             <div>
               <p>Nº Tickets</p>
-              <p className="text-stone-400 text-xs">x{ticketAmount}</p>
             </div>
             <p>x{ticketAmount}</p>
           </div>
