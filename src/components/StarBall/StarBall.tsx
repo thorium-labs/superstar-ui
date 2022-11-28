@@ -4,14 +4,26 @@ import "./BallPlanets.css";
 
 interface Props {
   num: number;
+  font: string;
+  width: string;
+  ballColor?: string;
 }
 
-const StarBall: React.FC<Props> = ({ num }) => {
+const StarBall: React.FC<Props> = ({
+  num,
+  width,
+  font,
+  ballColor = "stone",
+}) => {
   return (
-    <div className="relative w-[4rem] min-h-[4rem] flex items-center justify-center rounded-full ">
-      <img src="/assets/stone-ball.png" className="w-[4rem] min-h-[4rem]" />
-      <Star className="ball-planet absolute" />
-      <span className="absolute text-stone-800 text-xl font-bold top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 ">
+    <div
+      className={`relative w-[${width}] flex items-center justify-center rounded-full`}
+    >
+      <img src={`/assets/${ballColor}-ball.png`} className={`w-[${width}]`} />
+      <Star className={`ball-planet absolute w-[${width}] h-[${width}]`} />
+      <span
+        className={`absolute text-stone-800 text-${font} font-bold top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2`}
+      >
         {num}
       </span>
     </div>

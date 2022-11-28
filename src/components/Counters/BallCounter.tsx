@@ -41,7 +41,7 @@ const BallCounter: React.FC<
       <button className="arrow outline-none opacity-50" onClick={plus}>
         <MinArrowUp />
       </button>
-      <StarBall num={count} />
+      <StarBall num={count} font="xl" width="4rem" />
       <button className="arrow outline-none opacity-50" onClick={minus}>
         <MinArrowDown />
       </button>
