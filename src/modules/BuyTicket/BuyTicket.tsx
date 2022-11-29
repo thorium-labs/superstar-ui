@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { GradientButton } from "../../components/Buttons";
 import { SimpleCounter } from "../../components/Counters";
 import BuyTicketContainer from "./components/BuyTicketContainer";
+import DrawContainer from "./components/DrawContainer";
 
 const BuyTicket: React.FC = () => {
   const [ticketAmount, setTicketAmount] = useState<number>(1);
@@ -22,6 +23,7 @@ const BuyTicket: React.FC = () => {
 
   return (
     <div className="flex gap-4 flex-wrap relative">
+      <DrawContainer />
       <h1 className="w-full text-5xl mb-8">Buy tickets</h1>
       <div className="max-w-[800px]">
         <div className="rounded-lg border border-stone-600/50 flex items-center justify-between p-2">
