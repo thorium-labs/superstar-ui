@@ -1,6 +1,10 @@
 import React from "react";
+import { useStargate } from "../../providers/StargateProvider";
+import { useWallet } from "../../providers/WalletProvider";
 
 const About: React.FC = () => {
+  const { balance } = useStargate();
+
   return (
     <div className="relative">
       <img
@@ -45,7 +49,7 @@ const About: React.FC = () => {
         alt="ball"
         className="h-[7rem] w-[7rem] animate-floating absolute bottom-[7rem] right-[-2rem] z-20"
       />
-      <div className="flex flex-col gap-4 bg-stone-700/20 backdrop-blur rounded-xl relative my-36">
+      <div className="flex flex-col gap-4 bg-stone-700/20 backdrop-blur rounded-xl relative mt-36 mb-24">
         <div className="grid grid-cols-2 py-20 px-8 gap-8">
           <h1 className="text-6xl">Why we are better than others?</h1>
           <div>
@@ -127,7 +131,7 @@ const About: React.FC = () => {
             <p className="uppercase font-extrabold text-sm">winners /month</p>
           </div>
           <div className="flex flex-col items-center justify-center">
-            <h3 className="text-4xl">922.876 OSMO</h3>
+            <h3 className="text-4xl">922.876 {balance?.denom.slice(1)}</h3>
             <p className="uppercase font-extrabold text-sm">
               Payouts to winners
             </p>

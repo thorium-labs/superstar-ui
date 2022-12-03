@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useStargate } from "../../providers/StargateProvider";
 import { useWallet } from "../../providers/WalletProvider";
+import { amountToNormal } from "../../utils/calculateCoin";
 import { GradientButton } from "../Buttons";
 import { ArrowRight, Cross, Logo } from "../Icons";
 import MenuSpan from "../Icons/MenuSpan";
@@ -64,8 +65,8 @@ const NavMenu: React.FC = () => {
               className="disconnect-button outline-none relative"
               onClick={disconnectWallet}
             >
-              <TextOutline className="min-w-[7.6rem] text-center">
-                <span>{balance?.amount}</span>
+              <TextOutline className="min-w-[9.5rem] text-center gap-5">
+                <span>{amountToNormal(balance?.amount as string)}</span>
                 <span className="uppercase">{balance?.denom.slice(1)}</span>
               </TextOutline>
               <span className="disconnect-text opacity-0 absolute bg-ss-bg rounded-[10px] py-1 px-2 top-[2px] left-[2px] transition-all">
@@ -73,7 +74,7 @@ const NavMenu: React.FC = () => {
               </span>
             </button>
           ) : (
-            <GradientButton onClick={connectWallet} className="min-w-[7.6rem]">
+            <GradientButton onClick={connectWallet} className="min-w-[9.5rem]">
               Connect Wallet
             </GradientButton>
           )}

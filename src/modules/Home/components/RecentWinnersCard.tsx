@@ -1,7 +1,9 @@
 import React from "react";
+import { useStargate } from "../../../providers/StargateProvider";
 import { IntlAddress } from "../../../utils/intl";
 
 const RecentWinnersCard: React.FC = () => {
+  const { balance } = useStargate();
   return (
     <div className="bg-stone-700/60 rounded-lg flex flex-col p-4 gap-2 relative mt-[2rem] min-h-[100px]">
       <div className="absolute right-[1rem] top-[-2rem]">
@@ -15,7 +17,7 @@ const RecentWinnersCard: React.FC = () => {
         </p>
       </div>
       <p className="text-transparent bg-clip-text bg-gradient-to-r from-ss-orange-500/80 to-orange-500/80 text-2xl font-semibold">
-        12.4 OSMO
+        12.4 {balance?.denom.slice(1)}
       </p>
       <p className="text-sm">
         {IntlAddress("cosmos1nv0gx07y395pxfde2p5xyj033w58xrpr5eytzc")}

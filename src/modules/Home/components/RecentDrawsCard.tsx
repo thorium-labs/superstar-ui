@@ -1,4 +1,5 @@
 import React from "react";
+import { useStargate } from "../../../providers/StargateProvider";
 
 const BlackBall = (num: number) => (
   <div className="relative">
@@ -10,6 +11,7 @@ const BlackBall = (num: number) => (
 );
 
 const RecentDrawsCard: React.FC = () => {
+  const { balance } = useStargate();
   return (
     <div className="flex flex-col items-center gap-2 justify-center rounded-lg bg-gradient-to-tl from-ss-orange-500/80 to-orange-500/80 px-2 pb-4 relative mt-8">
       <div className="flex justify-between w-full">
@@ -40,7 +42,7 @@ const RecentDrawsCard: React.FC = () => {
       </div>
       <div className="flex flex-col justify-end pb-4 self-end w-[70%] items-center font-bold">
         <h4 className="text-4xl">1.278.555</h4>
-        <p className="uppercase text-stone-900">OSMO</p>
+        <p className="uppercase text-stone-900">{balance?.denom.slice(1)}</p>
       </div>
       <div className="flex w-full items-center justify-center">
         {BlackBall(3)}
