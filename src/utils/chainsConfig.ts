@@ -2,8 +2,8 @@ const juno_testnet = {
   chainId: "uni-5",
   chainName: "Juno Testnet",
   bech32Prefix: "juno",
-  rpcUrl: "https://rpc.uni.juno.deuslabs.fi:443",
-  restUrl: "https://lcd.uni.juno.deuslabs.fi",
+  rpcUrl: "https://rpc.uni.junonetwork.io/",
+  restUrl: "https://api.uni.junonetwork.io/",
   bip44: {
     coinType: 118,
   },
