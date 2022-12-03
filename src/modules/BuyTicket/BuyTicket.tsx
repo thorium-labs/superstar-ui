@@ -1,12 +1,21 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { GradientButton } from "../../components/Buttons";
 import { SimpleCounter } from "../../components/Counters";
+import { Draw } from "../../interfaces/lottery.interface";
+import { useCosmWasm } from "../../providers/CosmWasmProvider";
+import { useStargate } from "../../providers/StargateProvider";
+import { useWallet } from "../../providers/WalletProvider";
+import { amountToNormal } from "../../utils/calculateCoin";
 import BuyTicketContainer from "./components/BuyTicketContainer";
 import DrawContainer from "./components/DrawContainer";
 
 const BuyTicket: React.FC = () => {
   const [ticketAmount, setTicketAmount] = useState<number>(1);
   const [tickets, setTickets] = useState<string[]>([]);
+  const [draw, setDraw] = useState<Draw>();
+  const { address } = useWallet();
+  const { getCurrentDraw, buyTickets } = useCosmWasm();
+  const { balance } = useStargate();
 
   const addTicket = (newTicketAmount: number) => {
     setTicketAmount(newTicketAmount);
@@ -21,9 +30,13 @@ const BuyTicket: React.FC = () => {
     setTickets([...tickets]);
   };
 
+  useEffect(() => {
+    getCurrentDraw().then(setDraw);
+  }, [getCurrentDraw]);
+
   return (
     <div className="flex gap-4 flex-wrap relative">
-      <DrawContainer />
+      <DrawContainer draw={draw as Draw} />
       <h1 className="w-full text-5xl mb-8">Buy tickets</h1>
       <div className="max-w-[800px]">
         <div className="rounded-lg border border-stone-600/50 flex items-center justify-between p-2">
@@ -45,6 +58,7 @@ const BuyTicket: React.FC = () => {
                     ticketNumber={tickets[i]}
                     setTicketNumber={updateTicket}
                     ticketPosition={i}
+                    draw={draw as Draw}
                   />
                 );
               })
@@ -58,11 +72,16 @@ const BuyTicket: React.FC = () => {
           <div className="flex justify-between">
             <div>
               <p>Ticket price</p>
-              <p className="text-stone-400 uppercase text-xs">Draw 1</p>
+              <p className="text-stone-400 uppercase text-xs">
+                Draw #{draw?.id}
+              </p>
             </div>
             <div>
               <p className="uppercase">
-                2 <span className="text-ss-orange-500">OSMO</span>
+                {amountToNormal(draw?.ticket_price.amount as string)}{" "}
+                <span className="text-ss-orange-500">
+                  {balance?.denom.slice(1)}
+                </span>
               </p>
             </div>
           </div>
@@ -78,11 +97,21 @@ const BuyTicket: React.FC = () => {
               <p className="uppercase text-xl">Total</p>
             </div>
             <p className="uppercase">
-              {ticketAmount * 2}{" "}
-              <span className="text-ss-orange-500">OSMO</span>
+              {ticketAmount *
+                amountToNormal(draw?.ticket_price.amount as string)}{" "}
+              <span className="text-ss-orange-500">
+                {balance?.denom.slice(1)}
+              </span>
             </p>
           </div>
-          <GradientButton>Pay now</GradientButton>
+          <GradientButton
+            onClick={() =>
+              draw && buyTickets(draw.id, draw.ticket_price, tickets)
+            }
+            disabled={!address}
+          >
+            Pay now
+          </GradientButton>
         </div>
         <img
           src="assets/orange-ball.png"

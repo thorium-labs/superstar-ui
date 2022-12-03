@@ -1,17 +1,19 @@
-import React, { useState } from "react";
+import React from "react";
 import { BallCounter } from "../../../components/Counters";
-import "./BuyTicketContainer.css";
+import { Draw } from "../../../interfaces/lottery.interface";
 
 interface Props {
   ticketNumber: string;
   setTicketNumber: (n: string, pos: number) => void;
   ticketPosition: number;
+  draw: Draw;
 }
 
 const BuyTicketContainer: React.FC<Props> = ({
   ticketNumber,
   setTicketNumber,
   ticketPosition,
+  draw,
 }) => {
   const ticketNumbers = ticketNumber.split("");
 
@@ -25,7 +27,7 @@ const BuyTicketContainer: React.FC<Props> = ({
       <div className="p-2 min-w-[15rem] rounded-xl flex items-center justify-center flex-col bg-stone-700/30 backdrop-blur">
         <p className="font-bold text-xs text-stone-100">DRAW</p>
         <p className="text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-ss-orange-500/80 to-orange-500/80">
-          1
+          {draw?.id}
         </p>
       </div>
       <div className=" points-box absolute z-50 flex flex-col justify-between h-full left-[14.8rem]">
