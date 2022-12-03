@@ -1,15 +1,56 @@
-import React from "react";
+import {
+  differenceInHours,
+  differenceInMinutes,
+  differenceInSeconds,
+  getHours,
+  getMinutes,
+  getSeconds,
+} from "date-fns";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import StarsButton from "../../../components/Buttons/StarsButton";
+import { Draw } from "../../../interfaces/lottery.interface";
+import { useCosmWasm } from "../../../providers/CosmWasmProvider";
 import { useWallet } from "../../../providers/WalletProvider";
+import {
+  calculateTimeLeft,
+  initTimerValues,
+  timerState,
+} from "../../../utils/calculateTimeLeft";
 
 const DrawPresent: React.FC = () => {
   const { chainInfo } = useWallet();
+  const { getCurrentDraw } = useCosmWasm();
+  const [draw, setDraw] = useState<Draw>();
+  const [timeLeft, setTimeLeft] = React.useState<timerState>(initTimerValues);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    getCurrentDraw().then(setDraw);
+  }, [getCurrentDraw]);
+
+  useEffect(() => {
+    if (!draw) return;
+    const timer = setInterval(
+      () =>
+        setTimeLeft(
+          calculateTimeLeft(
+            new Date(+(draw?.end_time as { at_time: string }).at_time / 1e6)
+          )
+        ),
+      1000
+    );
+    return () => clearInterval(timer);
+  }, [draw]);
+
   return (
     <div className="relative w-full min-h-[160px] mt-[2rem] mb-[3rem]">
       <div className="py-4 px-12 rounded-xl bg-stone-700/20 backdrop-blur w-full mx-auto flex gap-4 items-center justify-between min-h-[10rem] absolute z-20">
         <div className="min-w-[200px] flex flex-col items-center gap-2">
-          <div>
-            <p className="text-4xl font-extrabold">40.456</p>
+          <div className="flex items-center justify-center flex-col">
+            <p className="text-4xl font-extrabold">
+              {Number(draw?.total_prize.amount) / 1e6}
+            </p>
             <p className="text-center uppercase">
               {chainInfo.feeToken.slice(1)}
             </p>
@@ -17,23 +58,48 @@ const DrawPresent: React.FC = () => {
         </div>
         <span className="w-[2px] h-[6rem] bg-gradient-to-bl from-ss-orange-500 to-orange-500 rounded-lg" />
         <div className="grid grid-cols-3 items-center justify-center">
-          <p className="text-center col-span-3 text-lg">Next draw</p>
-          <div className="p-2 text-center">
-            <p className="font-bold bg-stone-900 rounded-xl py-2 text-lg">20</p>
-            <p className="text-stone-400 uppercase text-xs">hours</p>
+          <div className="flex items-center justify-center gap-2 col-span-3">
+            <p className="text-center text-lg">Next draw </p>
+            <span className="text-transparent bg-clip-text bg-gradient-to-t from-orange-500 to-ss-orange-500 font-extrabold text-2xl">
+              #{draw?.id}
+            </span>
           </div>
-          <div className="p-2 text-center">
-            <p className="font-bold bg-stone-900 rounded-xl py-2 text-lg">20</p>
-            <p className="text-stone-400 uppercase text-xs">minutes</p>
-          </div>
-          <div className="p-2 text-center">
-            <p className="font-bold bg-stone-900 rounded-xl py-2 text-lg">20</p>
-            <p className="text-stone-400 uppercase text-xs">seconds</p>
-          </div>
+          {draw?.status === "pending" ? (
+            <div className="col-span-3 flex justify-center items-center min-h-[4.25rem] text-lg gap-2 font-semibold">
+              Pending...{" "}
+              <img
+                className="animate-spin-slow h-[2.5rem] w-[2.5rem]"
+                src="/assets/coin-front.png"
+              />
+            </div>
+          ) : (
+            <>
+              <div className="p-2 text-center">
+                <p className="font-bold bg-stone-900 rounded-xl py-2 text-lg">
+                  {timeLeft.hours}
+                </p>
+                <p className="text-stone-400 uppercase text-xs">hours</p>
+              </div>
+              <div className="p-2 text-center">
+                <p className="font-bold bg-stone-900 rounded-xl py-2 text-lg">
+                  {timeLeft.minutes}
+                </p>
+                <p className="text-stone-400 uppercase text-xs">minutes</p>
+              </div>
+              <div className="p-2 text-center">
+                <p className="font-bold bg-stone-900 rounded-xl py-2 text-lg">
+                  {timeLeft.seconds}
+                </p>
+                <p className="text-stone-400 uppercase text-xs">seconds</p>
+              </div>
+            </>
+          )}
         </div>
         <span className="w-[2px] h-[6rem] bg-gradient-to-bl from-ss-orange-500 to-orange-500 rounded-lg" />
         <div className="min-w-[200px] flex items-center justify-center">
-          <StarsButton>Play now</StarsButton>
+          <StarsButton onClick={() => navigate("/ticket")}>
+            Play now
+          </StarsButton>
         </div>
       </div>
       <img
