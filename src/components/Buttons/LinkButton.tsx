@@ -12,7 +12,7 @@ const LinkButton: React.FC<PropsWithChildren<ButtonAttributes>> = ({
     <button
       className={clsx(
         className,
-        `min-w-fit outline-none py-1 px-2 rounded-lg text-stone-50 font-extrabold hover:underline transition-all`
+        `min-w-fit outline-none rounded-lg text-stone-50 font-extrabold hover:underline transition-all`
       )}
       {...props}
     >
