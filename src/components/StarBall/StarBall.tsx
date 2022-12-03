@@ -1,6 +1,5 @@
 import React from "react";
 import Star from "../Icons/Star";
-import "./BallPlanets.css";
 
 interface Props {
   num: number;
