@@ -1,8 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: [
-    "./src/**/*.{js,jsx,ts,tsx}",
-  ],
+  content: ["./src/**/*.{js,jsx,ts,tsx}"],
   theme: {
     extend: {
       colors: {
@@ -19,15 +17,16 @@ module.exports = {
       },
       keyframes: {
         floating: {
-          '0%, 100%': { transform: 'translatey(0px)' },
-          '50%': { transform: 'translatey(-10px)' },
-        }
+          "0%, 100%": { transform: "translatey(0px)" },
+          "50%": { transform: "translatey(-10px)" },
+        },
       },
       animation: {
-        'floating': 'floating 6s ease-in-out infinite',
-        'floating-2': 'floating 4s ease-in-out infinite',
-      }
+        floating: "floating 6s ease-in-out infinite",
+        "floating-2": "floating 4s ease-in-out infinite",
+        "spin-slow": "spin 2.5s linear infinite",
+      },
     },
   },
   plugins: [],
-}
+};
