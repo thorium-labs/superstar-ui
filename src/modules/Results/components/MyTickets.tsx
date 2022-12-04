@@ -8,6 +8,9 @@ import { Draw, TicketResult } from '../../../interfaces/lottery.interface';
 import { useCosmWasm } from '../../../providers/CosmWasmProvider';
 import { useWallet } from '../../../providers/WalletProvider';
 import SmallTicketContainer from './SmallTicketContainer';
+// @ts-ignore
+import ReactSlidy from 'react-slidy';
+import 'react-slidy/lib/styles.css';
 
 const MyTickets: React.FC = () => {
   const { getCurrentDraw, getDrawInfo, checkDrawWinner } = useCosmWasm();
@@ -67,16 +70,26 @@ const MyTickets: React.FC = () => {
     );
   }
 
+  function CustomArrowLeft(props: Record<string, unknown>) {
+    return <GoBack height="2rem" width="2rem" {...props} />;
+  }
+
+  function CustomArrowRight(props: Record<string, unknown>) {
+    return <GoForward height="2rem" width="2rem" {...props} />;
+  }
+
   return (
     <div className="flex flex-col w-full gap-8 my-12 max-w-4xl mx-auto">
       {currentDraw && (
         <div>
           <h2 className="text-4xl font-bold">Current Draw</h2>
           {currentUserTicket?.length ? (
-            <div className="flex gap-4 my-8 py-8 min-h-[14rem]">
-              {currentUserTicket.map(({ ticket_number }, i) => {
-                return <SmallTicketContainer number={ticket_number} draw={currentDraw.id} />;
-              })}
+            <div className="my-8">
+              <ReactSlidy numOfSlides={3} ArrowLeft={CustomArrowLeft} ArrowRight={CustomArrowRight}>
+                {currentUserTicket.map(({ ticket_number }, i) => {
+                  return <SmallTicketContainer number={ticket_number} draw={currentDraw.id} />;
+                })}
+              </ReactSlidy>
             </div>
           ) : (
             <div className="bg-stone-700/20 backdrop-blur rounded-lg px-4 py-8 flex items-center justify-center my-8 flex-col">

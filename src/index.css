@@ -57,6 +57,14 @@ h6 {
   width: 1.5rem;
 }
 
+.react-Slidy {
+  padding: 0 2rem;
+}
+
+.react-Slidy-arrow {
+  opacity: 0.5;
+}
+
 ::-moz-selection {
   /* Code for Firefox */
   color: white;
