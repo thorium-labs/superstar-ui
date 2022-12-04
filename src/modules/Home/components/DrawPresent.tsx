@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import StarsButton from "../../../components/Buttons/StarsButton";
-import { Draw } from "../../../interfaces/lottery.interface";
-import { useWallet } from "../../../providers/WalletProvider";
-import { amountToNormal } from "../../../utils/calculateCoin";
-import { calculateTimeLeft, initTimerValues, timerState } from "../../../utils/calculateTimeLeft";
+import React, { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import StarsButton from '../../../components/Buttons/StarsButton';
+import { Draw } from '../../../interfaces/lottery.interface';
+import { useWallet } from '../../../providers/WalletProvider';
+import { amountToNormal } from '../../../utils/calculateCoin';
+import { calculateTimeLeft, initTimerValues, timerState } from '../../../utils/calculateTimeLeft';
 
 interface Props {
   draw?: Draw;
@@ -38,7 +38,7 @@ const DrawPresent: React.FC<Props> = ({ draw }) => {
               #{draw?.id}
             </span>
           </div>
-          {draw?.status === "pending" ? (
+          {draw?.status === 'pending' ? (
             <div className="col-span-3 flex justify-center items-center min-h-[4.25rem] text-lg gap-2 font-semibold">
               Pending... <img className="animate-spin-slow h-[2.5rem] w-[2.5rem]" src="/assets/coin-front.png" />
             </div>
@@ -61,7 +61,7 @@ const DrawPresent: React.FC<Props> = ({ draw }) => {
         </div>
         <span className="w-[2px] h-[6rem] bg-gradient-to-bl from-ss-orange-500 to-orange-500 rounded-lg" />
         <div className="min-w-[200px] flex items-center justify-center">
-          <StarsButton onClick={() => navigate("/ticket")}>Play now</StarsButton>
+          <StarsButton onClick={() => navigate('/ticket')}>Play now</StarsButton>
         </div>
       </div>
       <img src="/assets/orange-ball.png" className="w-[7rem] absolute top-[-3rem] left-[-2.5rem] animate-floating-2" />
