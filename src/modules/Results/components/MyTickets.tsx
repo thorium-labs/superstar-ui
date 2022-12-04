@@ -1,17 +1,22 @@
 import { format } from 'date-fns';
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { GradientButton } from '../../../components/Buttons';
+import StarsButton from '../../../components/Buttons/StarsButton';
 import { GoBack, GoForward, GoTotallyBack, GoTotallyForward } from '../../../components/Icons';
 import { Draw, TicketResult } from '../../../interfaces/lottery.interface';
 import { useCosmWasm } from '../../../providers/CosmWasmProvider';
 import { useWallet } from '../../../providers/WalletProvider';
+import SmallTicketContainer from './SmallTicketContainer';
 
 const MyTickets: React.FC = () => {
   const { getCurrentDraw, getDrawInfo, checkDrawWinner } = useCosmWasm();
   const { connectWallet, address } = useWallet();
   const [currentDraw, setCurrentDraw] = useState<Draw>();
+  const [currentUserTicket, setCurrentUserTicket] = useState<TicketResult[]>();
   const [drawInfo, setDrawInfo] = useState<Draw>();
-  const [drawUserTicket, setDrawUserTicket] = useState<any[]>();
+  const [drawUserTicket, setDrawUserTicket] = useState<TicketResult[]>();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (!address) return;
@@ -20,6 +25,7 @@ const MyTickets: React.FC = () => {
       setCurrentDraw(draw);
       setDrawInfo(await getDrawInfo(draw.id - 1));
       setDrawUserTicket(await checkDrawWinner(draw.id - 1));
+      setCurrentUserTicket(await checkDrawWinner(draw.id));
     };
     loadCurrentDraw();
   }, [getCurrentDraw, checkDrawWinner]);
@@ -63,7 +69,23 @@ const MyTickets: React.FC = () => {
 
   return (
     <div className="flex flex-col w-full gap-8 my-12 max-w-4xl mx-auto">
-      <div>my tickets</div>
+      {currentDraw && (
+        <div>
+          <h2 className="text-4xl font-bold">Current Draw</h2>
+          {currentUserTicket?.length ? (
+            <div className="flex gap-4 my-8 py-8 min-h-[14rem]">
+              {currentUserTicket.map(({ ticket_number }, i) => {
+                return <SmallTicketContainer number={ticket_number} draw={currentDraw.id} />;
+              })}
+            </div>
+          ) : (
+            <div className="bg-stone-700/20 backdrop-blur rounded-lg px-4 py-8 flex items-center justify-center my-8 flex-col">
+              <p className="mb-8">You didn't buy tickets for this draw</p>
+              <StarsButton onClick={() => navigate('/ticket')}>Buy it now!</StarsButton>
+            </div>
+          )}
+        </div>
+      )}
       {drawInfo && (
         <div>
           <div className=" flex justify-between items-center mb-4">
@@ -88,7 +110,7 @@ const MyTickets: React.FC = () => {
               </button>
             </div>
           </div>
-          {drawUserTicket ? (
+          {drawUserTicket?.length ? (
             <>
               <div className=" grid grid-cols-2 px-4 py-2 rounded-lg bg-gradient-to-tl from-ss-orange-500/80 to-orange-500/80 text-lg">
                 <p className="text-center font-semibold">Nº Ticket</p>
@@ -97,7 +119,7 @@ const MyTickets: React.FC = () => {
               {drawUserTicket?.map((ticket, i) => {
                 return (
                   <div
-                    className="even:bg-stone-700/20 odd:backdrop-blur  grid grid-cols-2 px-4 py-2 rounded-lg"
+                    className="even:bg-stone-700/20 even:backdrop-blur  grid grid-cols-2 px-4 py-2 rounded-lg"
                     key={`ticket-${i}-${ticket.ticket_number}`}
                   >
                     <div className="flex mt-2 gap-1 justify-center items-center relative">
@@ -107,7 +129,7 @@ const MyTickets: React.FC = () => {
                             <p className="absolute top-0 left-0 right-0 bottom-0 m-auto flex items-center justify-center font-bold text-lg">
                               {num}
                             </p>
-                            {num === drawInfo.winner_number[i] ? (
+                            {ticket.matches === i + 1 ? (
                               <img src="assets/orange-ball.png" className="w-[2rem]" />
                             ) : (
                               <img src="assets/stone-ball.png" className="w-[2rem]" />
@@ -116,15 +138,15 @@ const MyTickets: React.FC = () => {
                         );
                       })}
                     </div>
-                    <p className="text-center">{ticket.matches}</p>
+                    <p className="flex items-center justify-center">{ticket.matches}</p>
                   </div>
                 );
               })}
               <div className=" bg-gradient-to-r from-ss-orange-500/80 to-orange-500/80 h-[2px] rounded-xl mb-[2rem]" />
               <div className=" grid grid-cols-3 px-4 py-2 rounded-lg  text-lg">
-                <p className="text-center">Total ticket prize </p>
+                <p className="text-center text-stone-400">Total ticket prize </p>
                 <p className="text-center text-2xl font-bold">0.005 {drawInfo.total_prize.denom.slice(1)}</p>
-                <GradientButton>Claim!</GradientButton>
+                <GradientButton className="w-fit px-20">Claim!</GradientButton>
               </div>
             </>
           ) : (
