@@ -12,3 +12,7 @@ export { default as NotificationIcon } from "./NotificationIcon";
 export { default as PlusRounded } from "./PlusRounded";
 export { default as Star } from "./Star";
 export { default as Twitter } from "./Twitter";
+export { default as GoForward } from "./GoForward";
+export { default as GoBack } from "./GoBack";
+export { default as GoTotallyForward } from "./GoTotallyForward";
+export { default as GoTotallyBack } from "./GoTotallyBack";
