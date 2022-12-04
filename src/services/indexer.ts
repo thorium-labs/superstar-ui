@@ -1,6 +1,6 @@
-import { request, gql } from "graphql-request";
+import { request, gql } from 'graphql-request';
 
-const INDEXER_URL = "https://api.subquery.network/sq/j0nl1/superstar";
+const INDEXER_URL = import.meta.env.VITE_INDEXER_URL;
 
 const queryRecentPurchases = gql`
   query recentPurchases($limit: Int) {
@@ -29,14 +29,14 @@ const queryRecentWinners = gql`
 
 export const getRecentPurchases = async (limit: number) => {
   const data = await request(INDEXER_URL, queryRecentPurchases, {
-    limit,
+    limit
   });
   return data.purchases.nodes;
 };
 
 export const getRecentWinners = async (limit: number) => {
   const data = await request(INDEXER_URL, queryRecentWinners, {
-    limit,
+    limit
   });
   return data.winners.nodes;
 };
