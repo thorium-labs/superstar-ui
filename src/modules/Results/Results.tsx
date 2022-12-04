@@ -1,13 +1,13 @@
 import clsx from 'clsx';
 import React, { useState } from 'react';
-import { GradientButton } from '../../components/Buttons';
-import { useWallet } from '../../providers/WalletProvider';
 import MyTickets from './components/MyTickets';
 import RecentDraws from './components/RecentDraws';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useSearchParams } from 'react-router-dom';
 
 const Results: React.FC = () => {
-  const [currentTab, setCurrenTab] = useState<'recent-draws' | 'my-tickets'>('recent-draws');
+  const [searchParams] = useSearchParams();
+  const [currentTab, setCurrenTab] = useState<'recent-draws' | 'my-tickets'>(searchParams.has('tickets') ? 'my-tickets' : 'recent-draws');
 
   const TabButton = (key: 'recent-draws' | 'my-tickets') => {
     return (

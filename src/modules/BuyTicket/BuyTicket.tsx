@@ -7,12 +7,15 @@ import { useWallet } from '../../providers/WalletProvider';
 import { amountToNormal } from '../../utils/calculateCoin';
 import BuyTicketContainer from './components/BuyTicketContainer';
 import DrawContainer from './components/DrawContainer';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-hot-toast';
 
 const BuyTicket: React.FC = () => {
   const [ticketAmount, setTicketAmount] = useState<number>(1);
   const [tickets, setTickets] = useState<string[]>([]);
   const [draw, setDraw] = useState<Draw>();
   const { address } = useWallet();
+  const navigate = useNavigate();
   const { getCurrentDraw, buyTickets, balance } = useCosmWasm();
 
   const addTicket = (newTicketAmount: number) => {
@@ -24,6 +27,16 @@ const BuyTicket: React.FC = () => {
   const updateTicket = (ticketNumber: string, ticketPosition: number) => {
     tickets.splice(ticketPosition, 1, ticketNumber);
     setTickets([...tickets]);
+  };
+
+  const handlerBuyTickets = async () => {
+    if (!draw) return;
+    await toast.promise(buyTickets(draw.id, draw.ticket_price, tickets), {
+      loading: 'Sending Tx',
+      success: <b>Tx Sucess</b>,
+      error: 'Error'
+    });
+    navigate('/results?tickets');
   };
 
   useEffect(() => {
@@ -87,10 +100,7 @@ const BuyTicket: React.FC = () => {
               <span className="text-ss-orange-500">{balance?.denom.slice(1)}</span>
             </p>
           </div>
-          <GradientButton
-            onClick={() => draw && buyTickets(draw.id, draw.ticket_price, tickets)}
-            disabled={!address || draw?.status === 'pending'}
-          >
+          <GradientButton onClick={handlerBuyTickets} disabled={!address || draw?.status === 'pending'}>
             Pay now
           </GradientButton>
         </div>
