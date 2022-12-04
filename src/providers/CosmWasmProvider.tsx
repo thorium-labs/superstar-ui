@@ -1,9 +1,9 @@
-import { ExecuteResult, setupWasmExtension, SigningCosmWasmClient, WasmExtension } from "@cosmjs/cosmwasm-stargate";
-import { GasPrice, coin, QueryClient } from "@cosmjs/stargate";
-import React, { PropsWithChildren, useCallback, useEffect, useState } from "react";
-import { Coin, Config, Draw, TicketResult } from "../interfaces/lottery.interface";
-import { useWallet } from "./WalletProvider";
-import { HttpBatchClient, Tendermint34Client } from "@cosmjs/tendermint-rpc";
+import { ExecuteResult, setupWasmExtension, SigningCosmWasmClient, WasmExtension } from '@cosmjs/cosmwasm-stargate';
+import { GasPrice, coin, QueryClient } from '@cosmjs/stargate';
+import React, { PropsWithChildren, useCallback, useEffect, useState } from 'react';
+import { Coin, Config, Draw, TicketResult } from '../interfaces/lottery.interface';
+import { useWallet } from './WalletProvider';
+import { HttpBatchClient, Tendermint34Client } from '@cosmjs/tendermint-rpc';
 
 interface CosmWasmState {
   cosmWasmClient: SigningCosmWasmClient;
@@ -16,22 +16,31 @@ interface CosmWasmState {
   claimPrize: (drawId: number) => Promise<ExecuteResult | undefined>;
   getLastDraws: (lastDraw: number, limit: number) => Promise<Draw[]>;
   getConfig: () => Promise<Config>;
+  balance?: Coin;
+  refreshBalance: () => void;
 }
 
 export const CosmWasmContext = React.createContext<CosmWasmState | null>(null);
-const lotteryAddr = "juno1nakcl7mwca64wuev7vtw7vvxexjftmaamktt8a2fseakesr3s8asuhr5cq";
+const lotteryAddr = 'juno1nakcl7mwca64wuev7vtw7vvxexjftmaamktt8a2fseakesr3s8asuhr5cq';
 
 const CosmWasmProvider: React.FC<PropsWithChildren<{}>> = ({ children }) => {
   const { signer, address, chainInfo } = useWallet();
   const [cosmWasmClient, setCosmWasmClient] = useState<SigningCosmWasmClient>();
   const [queryClient, setQueryClient] = useState<QueryClient & WasmExtension>();
+  const [balance, setBalance] = useState<Coin>();
+
+  const refreshBalance = useCallback(async () => {
+    if (!address) return;
+    const balance = await cosmWasmClient?.getBalance(address, chainInfo.feeToken);
+    setBalance(balance as Coin);
+  }, [cosmWasmClient, address, chainInfo]);
 
   const getLastDraws = useCallback(
     async (lastDraw: number, limit: number) => {
       return await Promise.all(
         Array.from({ length: limit }, (_, i) =>
           queryClient?.wasm.queryContractSmart(lotteryAddr, {
-            get_draw: { id: lastDraw - i },
+            get_draw: { id: lastDraw - i }
           })
         )
       );
@@ -41,49 +50,49 @@ const CosmWasmProvider: React.FC<PropsWithChildren<{}>> = ({ children }) => {
 
   const getConfig = useCallback(async () => {
     return await queryClient?.wasm.queryContractSmart(lotteryAddr, {
-      get_config: {},
+      get_config: {}
     });
-  }, [cosmWasmClient]);
+  }, [queryClient]);
 
   const getCurrentDraw = useCallback(async () => {
-    const value = await cosmWasmClient?.queryContractSmart(lotteryAddr, {
-      get_current_draw: {},
+    const value = await queryClient?.wasm.queryContractSmart(lotteryAddr, {
+      get_current_draw: {}
     });
     return value;
-  }, [cosmWasmClient]);
+  }, [queryClient]);
 
   const getDrawInfo = useCallback(
     async (drawId: number) => {
-      return await cosmWasmClient?.queryContractSmart(lotteryAddr, {
-        get_draw: { id: drawId },
+      return await queryClient?.wasm.queryContractSmart(lotteryAddr, {
+        get_draw: { id: drawId }
       });
     },
-    [cosmWasmClient]
+    [queryClient]
   );
 
   const checkDrawWinner = useCallback(
     async (drawId: number) => {
-      return await cosmWasmClient?.queryContractSmart(lotteryAddr, {
-        check_winner: { addr: address, draw_id: drawId },
+      return await queryClient?.wasm.queryContractSmart(lotteryAddr, {
+        check_winner: { addr: address, draw_id: drawId }
       });
     },
-    [cosmWasmClient, address]
+    [queryClient, address]
   );
 
   const getDrawUserTickets = useCallback(
     async (drawId: number) => {
-      return await cosmWasmClient?.queryContractSmart(lotteryAddr, {
-        get_tickets: { addr: address, draw_id: drawId },
+      return await queryClient?.wasm.queryContractSmart(lotteryAddr, {
+        get_tickets: { addr: address, draw_id: drawId }
       });
     },
-    [cosmWasmClient, address]
+    [queryClient, address]
   );
 
   const buyTickets = useCallback(
     async (drawId: number, ticketPrice: Coin, tickets: string[]) => {
       const amount = Math.ceil(tickets.length * Number(ticketPrice.amount));
-      return await cosmWasmClient?.execute(address as string, lotteryAddr, { buy_ticket: { draw_id: drawId, tickets } }, "auto", undefined, [
-        coin(amount, ticketPrice.denom),
+      return await cosmWasmClient?.execute(address as string, lotteryAddr, { buy_ticket: { draw_id: drawId, tickets } }, 'auto', undefined, [
+        coin(amount, ticketPrice.denom)
       ]);
     },
     [cosmWasmClient]
@@ -95,9 +104,9 @@ const CosmWasmProvider: React.FC<PropsWithChildren<{}>> = ({ children }) => {
         address as string,
         lotteryAddr,
         {
-          claim_prize: { draw_id: drawId },
+          claim_prize: { draw_id: drawId }
         },
-        "auto"
+        'auto'
       );
     },
     [cosmWasmClient]
@@ -106,17 +115,29 @@ const CosmWasmProvider: React.FC<PropsWithChildren<{}>> = ({ children }) => {
   useEffect(() => {
     if (!signer || !address) return;
     const loadClient = async () => {
+      if (!chainInfo) return;
       const client = await SigningCosmWasmClient.connectWithSigner(chainInfo.rpcUrl, signer, {
         prefix: chainInfo.bech32Prefix,
-        gasPrice: GasPrice.fromString(chainInfo.defaultGasPrice + chainInfo.feeToken),
+        gasPrice: GasPrice.fromString(chainInfo.defaultGasPrice + chainInfo.feeToken)
       });
-      const httpClient = new HttpBatchClient(chainInfo.rpcUrl, { batchSizeLimit: 10 });
-      const queryClient = QueryClient.withExtensions(await Tendermint34Client.create(httpClient), setupWasmExtension);
       setCosmWasmClient(client);
-      setQueryClient(queryClient);
     };
     loadClient();
   }, [signer, address]);
+
+  useEffect(() => {
+    refreshBalance();
+  }, [cosmWasmClient]);
+
+  useEffect(() => {
+    const loadQueryClient = async () => {
+      const httpClient = new HttpBatchClient(chainInfo.rpcUrl, { batchSizeLimit: 10 });
+      const queryClient = QueryClient.withExtensions(await Tendermint34Client.create(httpClient), setupWasmExtension);
+      setQueryClient(queryClient);
+    };
+
+    loadQueryClient();
+  }, [chainInfo]);
 
   return (
     <CosmWasmContext.Provider
@@ -132,6 +153,8 @@ const CosmWasmProvider: React.FC<PropsWithChildren<{}>> = ({ children }) => {
           claimPrize,
           getLastDraws,
           getConfig,
+          refreshBalance,
+          balance
         } as CosmWasmState
       }
     >
@@ -142,7 +165,7 @@ const CosmWasmProvider: React.FC<PropsWithChildren<{}>> = ({ children }) => {
 
 export const useCosmWasm = () => {
   const context = React.useContext(CosmWasmContext);
-  if (!context) throw new Error("CosmWasm Context Provider is not instanced");
+  if (!context) throw new Error('CosmWasm Context Provider is not instanced');
   return context;
 };
 

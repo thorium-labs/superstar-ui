@@ -1,53 +1,53 @@
-import clsx from "clsx";
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import { useStargate } from "../../providers/StargateProvider";
-import { useWallet } from "../../providers/WalletProvider";
-import { amountToNormal } from "../../utils/calculateCoin";
-import { GradientButton } from "../Buttons";
-import { ArrowRight, Cross, Logo } from "../Icons";
-import MenuSpan from "../Icons/MenuSpan";
-import NotificacionIcon from "../Icons/NotificationIcon";
-import TextOutline from "../TextOutline";
-import "./NavMenu.css";
+import clsx from 'clsx';
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { useCosmWasm } from '../../providers/CosmWasmProvider';
+import { useWallet } from '../../providers/WalletProvider';
+import { amountToNormal } from '../../utils/calculateCoin';
+import { GradientButton } from '../Buttons';
+import { ArrowRight, Cross, Logo } from '../Icons';
+import MenuSpan from '../Icons/MenuSpan';
+import NotificacionIcon from '../Icons/NotificationIcon';
+import TextOutline from '../TextOutline';
+import './NavMenu.css';
 
 const NavMenu: React.FC = () => {
-  const [menu, setMenu] = useState<"open" | "close">("close");
+  const [menu, setMenu] = useState<'open' | 'close'>('close');
   const [notification, setNotification] = useState<string[]>([]);
   const { connectWallet, disconnectWallet, address } = useWallet();
-  const { balance } = useStargate();
+  const { balance } = useCosmWasm();
 
   const menuLinks = [
     {
-      link: "/",
-      text: "Home",
-      sum: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has",
-      src: "/assets/home.png",
+      link: '/',
+      text: 'Home',
+      sum: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has',
+      src: '/assets/home.png'
     },
     {
-      link: "/ticket",
-      text: "Buy Tickets",
-      sum: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has",
-      src: "/assets/tickets.png",
+      link: '/ticket',
+      text: 'Buy Tickets',
+      sum: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has',
+      src: '/assets/tickets.png'
     },
     {
-      link: "/results",
-      text: "Results",
-      sum: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has",
-      src: "/assets/results.png",
+      link: '/results',
+      text: 'Results',
+      sum: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has',
+      src: '/assets/results.png'
     },
     {
-      link: "/about",
-      text: "About",
-      sum: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has",
-      src: "/assets/about.png",
-    },
+      link: '/about',
+      text: 'About',
+      sum: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has',
+      src: '/assets/about.png'
+    }
   ];
 
   return (
     <>
       <div className="min-h-[72px] w-full h-full" />
-      <nav className={clsx("nav min-h-8 py-4 px-12 flex items-center justify-between w-full bg-transparent fixed top-0 z-40 backdrop-blur")}>
+      <nav className={clsx('nav min-h-8 py-4 px-12 flex items-center justify-between w-full bg-transparent fixed top-0 z-40 backdrop-blur')}>
         <Link to="/" className="flex items-center justify-center">
           <Logo className="logo" />
           <h2 className="text-xl">
@@ -76,18 +76,18 @@ const NavMenu: React.FC = () => {
             {notification.length ? (
               <span className="absolute block bg-gradient-to-bl from-ss-orange-500 to-orange-500 h-2 w-2 top-[2px] right-[-3px] rounded-full" />
             ) : (
-              ""
+              ''
             )}
           </button>
-          <button onClick={() => setMenu("open")} className="outline-none ">
+          <button onClick={() => setMenu('open')} className="outline-none ">
             <MenuSpan className="w-[28px] h-[28px] hover:stroke-ss-orange-500" />
           </button>
         </div>
       </nav>
-      <div className={clsx("fixed z-50 h-screen w-screen bg-stone-700/50 backdrop-blur-lg", menu, menu == "open" ? "flex" : "hidden")}>
-        <ul className={clsx("relative w-full h-full flex")}>
+      <div className={clsx('fixed z-50 h-screen w-screen bg-stone-700/50 backdrop-blur-lg', menu, menu == 'open' ? 'flex' : 'hidden')}>
+        <ul className={clsx('relative w-full h-full flex')}>
           <button
-            onClick={() => setMenu("close")}
+            onClick={() => setMenu('close')}
             className="border border-stone-50 rounded-full absolute top-5 right-5 p-2 z-40 hover:border-orange-500"
           >
             <Cross className="h-[24px] w-[24px] hover:fill-orange-500" />
@@ -95,7 +95,7 @@ const NavMenu: React.FC = () => {
           {menuLinks.map(({ link, text, sum, src }, i) => {
             return (
               <React.Fragment key={`menu-${i}`}>
-                <li className="nav-li relative flex-1 transition-all duration-300" onClick={() => setMenu("close")}>
+                <li className="nav-li relative flex-1 transition-all duration-300" onClick={() => setMenu('close')}>
                   <Link
                     to={link}
                     className="nav-link flex items-start justify-center flex-col px-4 gap-2 h-full transition-all duration-300 hover:bg-gradient-to-b from-transparent via-transparent to-stone-500/70"

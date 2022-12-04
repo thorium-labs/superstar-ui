@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react";
-import { Draw } from "../../../interfaces/lottery.interface";
-import { useStargate } from "../../../providers/StargateProvider";
-import { amountToNormal } from "../../../utils/calculateCoin";
-import { calculateTimeLeft, initTimerValues, timerState } from "../../../utils/calculateTimeLeft";
+import React, { useEffect, useState } from 'react';
+import { Draw } from '../../../interfaces/lottery.interface';
+import { useCosmWasm } from '../../../providers/CosmWasmProvider';
+import { amountToNormal } from '../../../utils/calculateCoin';
+import { calculateTimeLeft, initTimerValues, timerState } from '../../../utils/calculateTimeLeft';
 
 const DrawContainer: React.FC<{ draw: Draw }> = ({ draw }) => {
-  const { balance } = useStargate();
+  const { balance } = useCosmWasm();
   const [timeLeft, setTimeLeft] = React.useState<timerState>(initTimerValues);
 
   useEffect(() => {
@@ -21,7 +21,7 @@ const DrawContainer: React.FC<{ draw: Draw }> = ({ draw }) => {
           <p className="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-ss-orange-500/80 to-orange-500/80">
             Draw #{draw?.id}
           </p>
-          {draw?.status === "pending" ? (
+          {draw?.status === 'pending' ? (
             <div className="col-span-3 flex justify-center items-center min-h-[4.25rem] text-lg gap-2 font-semibold min-w-[12.6rem]">
               Pending... <img className="animate-spin-slow h-[2.5rem] w-[2.5rem]" src="/assets/coin-front.png" />
             </div>
@@ -65,7 +65,7 @@ const DrawContainer: React.FC<{ draw: Draw }> = ({ draw }) => {
                   <div className="flex mt-2 gap-1">
                     {Array.from({ length: 6 }).map((_, indexBall) => {
                       return (
-                        <React.Fragment key={"balls_" + indexBall}>
+                        <React.Fragment key={'balls_' + indexBall}>
                           {indexBall <= i ? (
                             <img src="assets/orange-ball.png" className="w-[1.2rem]" />
                           ) : (

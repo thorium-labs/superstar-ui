@@ -1,6 +1,6 @@
-import React, { useEffect } from "react";
-import { Config } from "../../../interfaces/lottery.interface";
-import { useCosmWasm } from "../../../providers/CosmWasmProvider";
+import React, { useEffect } from 'react';
+import { Config } from '../../../interfaces/lottery.interface';
+import { useCosmWasm } from '../../../providers/CosmWasmProvider';
 
 const HowToPlay: React.FC = () => {
   const { getConfig } = useCosmWasm();
@@ -34,17 +34,13 @@ const HowToPlay: React.FC = () => {
           <h5 className="text-white text-center">Draw</h5>
           <h5 className="text-white text-center">Prize per match</h5>
           {config?.percentage_per_match.map((_, index) => (
-            <React.Fragment key={"how_to_play_" + index}>
+            <React.Fragment key={'how_to_play_' + index}>
               <div className="flex justify-center items-center">
                 {Array.from({ length: 6 - index }, (_, i) => (
-                  <React.Fragment key={"how_to_play_orange_ball_" + index + i}>
-                    <img src="assets/orange-ball.png" className="w-[2rem] h-[2rem]" />
-                  </React.Fragment>
+                  <img key={'how_to_play_orange_ball_' + index + i} src="assets/orange-ball.png" className="w-[2rem] h-[2rem]" />
                 ))}
                 {Array.from({ length: index }, (_, i) => (
-                  <React.Fragment key={"how_to_play_orange_ball_" + index + i}>
-                    <img src="assets/stone-ball.png" className="w-[2rem] h-[2rem]" />
-                  </React.Fragment>
+                  <img key={'how_to_play_orange_ball_' + index + i} src="assets/stone-ball.png" className="w-[2rem] h-[2rem]" />
                 ))}
               </div>
               <div className="text-transparent bg-clip-text bg-gradient-to-r from-ss-orange-500/80 to-orange-500/80 text-2xl font-semibold uppercase text-center">

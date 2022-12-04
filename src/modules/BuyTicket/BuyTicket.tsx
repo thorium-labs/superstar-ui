@@ -1,27 +1,23 @@
-import React, { useEffect, useState } from "react";
-import { GradientButton } from "../../components/Buttons";
-import { SimpleCounter } from "../../components/Counters";
-import { Draw } from "../../interfaces/lottery.interface";
-import { useCosmWasm } from "../../providers/CosmWasmProvider";
-import { useStargate } from "../../providers/StargateProvider";
-import { useWallet } from "../../providers/WalletProvider";
-import { amountToNormal } from "../../utils/calculateCoin";
-import BuyTicketContainer from "./components/BuyTicketContainer";
-import DrawContainer from "./components/DrawContainer";
+import React, { useEffect, useState } from 'react';
+import { GradientButton } from '../../components/Buttons';
+import { SimpleCounter } from '../../components/Counters';
+import { Draw } from '../../interfaces/lottery.interface';
+import { useCosmWasm } from '../../providers/CosmWasmProvider';
+import { useWallet } from '../../providers/WalletProvider';
+import { amountToNormal } from '../../utils/calculateCoin';
+import BuyTicketContainer from './components/BuyTicketContainer';
+import DrawContainer from './components/DrawContainer';
 
 const BuyTicket: React.FC = () => {
   const [ticketAmount, setTicketAmount] = useState<number>(1);
   const [tickets, setTickets] = useState<string[]>([]);
   const [draw, setDraw] = useState<Draw>();
   const { address } = useWallet();
-  const { getCurrentDraw, buyTickets } = useCosmWasm();
-  const { balance } = useStargate();
+  const { getCurrentDraw, buyTickets, balance } = useCosmWasm();
 
   const addTicket = (newTicketAmount: number) => {
     setTicketAmount(newTicketAmount);
-    const ticketNumber = Array.from({ length: 6 }, () =>
-      Math.floor(Math.random() * 9)
-    ).join("");
+    const ticketNumber = Array.from({ length: 6 }, () => Math.floor(Math.random() * 9)).join('');
     setTickets([...tickets, ticketNumber]);
   };
 
@@ -40,12 +36,7 @@ const BuyTicket: React.FC = () => {
       <h1 className="w-full text-5xl mb-8">Buy tickets</h1>
       <div className="max-w-[800px]">
         <div className="rounded-lg border border-stone-600/50 flex items-center justify-between p-2">
-          <SimpleCounter
-            changeNum={addTicket}
-            maxNumber={25}
-            initialValue={ticketAmount}
-            minNumber={1}
-          />
+          <SimpleCounter changeNum={addTicket} maxNumber={25} initialValue={ticketAmount} minNumber={1} />
           <h4>ADD TICKETS</h4>
           <p className="text-stone-200">25 tickets max.</p>
         </div>
@@ -72,16 +63,11 @@ const BuyTicket: React.FC = () => {
           <div className="flex justify-between">
             <div>
               <p>Ticket price</p>
-              <p className="text-stone-400 uppercase text-xs">
-                Draw #{draw?.id}
-              </p>
+              <p className="text-stone-400 uppercase text-xs">Draw #{draw?.id}</p>
             </div>
             <div>
               <p className="uppercase">
-                {amountToNormal(draw?.ticket_price.amount as string)}{" "}
-                <span className="text-ss-orange-500">
-                  {balance?.denom.slice(1)}
-                </span>
+                {amountToNormal(draw?.ticket_price.amount as string)} <span className="text-ss-orange-500">{balance?.denom.slice(1)}</span>
               </p>
             </div>
           </div>
@@ -97,32 +83,16 @@ const BuyTicket: React.FC = () => {
               <p className="uppercase text-xl">Total</p>
             </div>
             <p className="uppercase">
-              {ticketAmount *
-                Number(
-                  amountToNormal(draw?.ticket_price.amount as string)
-                )}{" "}
-              <span className="text-ss-orange-500">
-                {balance?.denom.slice(1)}
-              </span>
+              {ticketAmount * Number(amountToNormal(draw?.ticket_price.amount as string))}{' '}
+              <span className="text-ss-orange-500">{balance?.denom.slice(1)}</span>
             </p>
           </div>
-          <GradientButton
-            onClick={() =>
-              draw && buyTickets(draw.id, draw.ticket_price, tickets)
-            }
-            disabled={!address}
-          >
+          <GradientButton onClick={() => draw && buyTickets(draw.id, draw.ticket_price, tickets)} disabled={!address}>
             Pay now
           </GradientButton>
         </div>
-        <img
-          src="assets/orange-ball.png"
-          className="bubble animate-floating h-[6rem] w-[6rem] absolute top-[-4rem] right-[4rem]"
-        />
-        <img
-          src="assets/ss-orange-ball.png"
-          className="bubble h-[4rem] w-[4rem] rounded-full absolute top-[-2rem] right-[1rem] z-20"
-        />
+        <img src="assets/orange-ball.png" className="bubble animate-floating h-[6rem] w-[6rem] absolute top-[-4rem] right-[4rem]" />
+        <img src="assets/ss-orange-ball.png" className="bubble h-[4rem] w-[4rem] rounded-full absolute top-[-2rem] right-[1rem] z-20" />
       </div>
     </div>
   );
