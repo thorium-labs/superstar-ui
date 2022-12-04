@@ -1,7 +1,7 @@
 import { ExecuteResult, setupWasmExtension, SigningCosmWasmClient, WasmExtension } from "@cosmjs/cosmwasm-stargate";
 import { GasPrice, coin, QueryClient } from "@cosmjs/stargate";
 import React, { PropsWithChildren, useCallback, useEffect, useState } from "react";
-import { Coin, Draw, TicketResult } from "../interfaces/lottery.interface";
+import { Coin, Config, Draw, TicketResult } from "../interfaces/lottery.interface";
 import { useWallet } from "./WalletProvider";
 import { HttpBatchClient, Tendermint34Client } from "@cosmjs/tendermint-rpc";
 
@@ -15,6 +15,7 @@ interface CosmWasmState {
   buyTickets: (drawId: number, ticketPrice: Coin, tickets: string[]) => Promise<ExecuteResult | undefined>;
   claimPrize: (drawId: number) => Promise<ExecuteResult | undefined>;
   getLastDraws: (lastDraw: number, limit: number) => Promise<Draw[]>;
+  getConfig: () => Promise<Config>;
 }
 
 export const CosmWasmContext = React.createContext<CosmWasmState | null>(null);
@@ -37,6 +38,12 @@ const CosmWasmProvider: React.FC<PropsWithChildren<{}>> = ({ children }) => {
     },
     [queryClient]
   );
+
+  const getConfig = useCallback(async () => {
+    return await queryClient?.wasm.queryContractSmart(lotteryAddr, {
+      get_config: {},
+    });
+  }, [cosmWasmClient]);
 
   const getCurrentDraw = useCallback(async () => {
     const value = await cosmWasmClient?.queryContractSmart(lotteryAddr, {
@@ -124,6 +131,7 @@ const CosmWasmProvider: React.FC<PropsWithChildren<{}>> = ({ children }) => {
           buyTickets,
           claimPrize,
           getLastDraws,
+          getConfig,
         } as CosmWasmState
       }
     >
