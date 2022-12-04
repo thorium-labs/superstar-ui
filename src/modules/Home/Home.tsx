@@ -1,13 +1,30 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useCosmWasm } from "../../providers/CosmWasmProvider";
 import DrawPresent from "./components/DrawPresent";
 import HowToPlay from "./components/HowToPlay";
 import RecentDrawsCard from "./components/RecentDrawsCard";
 import RecentTicketsPurchased from "./components/RecentTicketsPurchasedCard";
 import RecentWinnersCard from "./components/RecentWinnersCard";
-
+import { Draw } from "../../interfaces/lottery.interface";
 import "./Home.css";
 
 const Home: React.FC = () => {
+  const { getLastDraws, getCurrentDraw } = useCosmWasm();
+  const [lastDraw, setLastDraw] = useState<Draw>();
+  const [recentDraws, setRecentDraws] = useState<Draw[]>([]);
+
+  useEffect(() => {
+    const loadDraws = async () => {
+      const draw = await getCurrentDraw();
+      if (!draw) return;
+      setLastDraw(draw);
+
+      const draws = await getLastDraws(draw?.id - 1, 4);
+      setRecentDraws(draws);
+    };
+
+    loadDraws();
+  }, [getLastDraws, getCurrentDraw]);
   return (
     <div className="flex flex-col gap-24">
       <div className="header min-h-[5rem] flex items-center">
@@ -17,18 +34,15 @@ const Home: React.FC = () => {
             <span className="text-ss-orange-500">Super</span>
             <span className="text-orange-500">Star</span>
           </h1>
-          <h2 className="text-stone-400 text-end">
-            A decentralized platform lottery on Osmosis blockchain
-          </h2>
+          <h2 className="text-stone-400 text-end">A decentralized platform lottery on Osmosis blockchain</h2>
         </div>
       </div>
-      <DrawPresent />
+      <DrawPresent draw={lastDraw} />
       <div className="grid grid-cols-4 gap-4 gap-x-8">
         <h2 className="col-span-4 text-3xl">Recent Draws</h2>
-        <RecentDrawsCard />
-        <RecentDrawsCard />
-        <RecentDrawsCard />
-        <RecentDrawsCard />
+        {recentDraws.map((draw) => (
+          <RecentDrawsCard key={draw.id} draw={draw} />
+        ))}
       </div>
       <HowToPlay />
       <div className="grid grid-cols-2 gap-4">

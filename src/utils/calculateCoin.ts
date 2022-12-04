@@ -1,5 +1,5 @@
-export const amountToNormal = (amount: number | string): number => {
-  return Number(amount) / 1e6;
+export const amountToNormal = (amount: number | string): string => {
+  return (Number(amount) / 1e6).toFixed(3);
 };
 
 export const amountToClumsy = (amount: number | string) => {

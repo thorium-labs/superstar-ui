@@ -14,13 +14,12 @@ interface WalletState {
 }
 
 export const WalletContext = React.createContext<WalletState | null>(null);
-const chainInfo = chainsConfig["osmosis_testnet"];
+const chainInfo = chainsConfig["juno_testnet"];
 
 const WalletProvider: React.FC<PropsWithChildren<{}>> = ({ children }) => {
   const [address, setAddress] = useState<string>();
   const [signer, setSigner] = useState<OfflineSigner>();
-  const [allowPermission, setAllowPermission] =
-    useLocalStorage<boolean>("allowPermission");
+  const [allowPermission, setAllowPermission] = useLocalStorage<boolean>("allowPermission");
 
   const connectWallet = async () => {
     const { chainId } = chainInfo;
