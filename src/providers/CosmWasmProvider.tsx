@@ -72,11 +72,11 @@ const CosmWasmProvider: React.FC<PropsWithChildren<{}>> = ({ children }) => {
 
   const checkDrawWinner = useCallback(
     async (drawId: number) => {
-      return await queryClient?.wasm.queryContractSmart(lotteryAddr, {
+      return await cosmWasmClient?.queryContractSmart(lotteryAddr, {
         check_winner: { addr: address, draw_id: drawId }
       });
     },
-    [queryClient, address]
+    [cosmWasmClient, address]
   );
 
   const getDrawUserTickets = useCallback(
