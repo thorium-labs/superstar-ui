@@ -21,7 +21,7 @@ interface CosmWasmState {
 }
 
 export const CosmWasmContext = React.createContext<CosmWasmState | null>(null);
-const lotteryAddr = 'juno1nakcl7mwca64wuev7vtw7vvxexjftmaamktt8a2fseakesr3s8asuhr5cq';
+const lotteryAddr = import.meta.env.VITE_CONTRACT_ADDR;
 
 const CosmWasmProvider: React.FC<PropsWithChildren<{}>> = ({ children }) => {
   const { signer, address, chainInfo } = useWallet();
