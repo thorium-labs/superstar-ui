@@ -9,6 +9,7 @@ import BuyTicketContainer from './components/BuyTicketContainer';
 import DrawContainer from './components/DrawContainer';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
+import { ExecuteResult } from '@cosmjs/cosmwasm-stargate';
 
 const BuyTicket: React.FC = () => {
   const [ticketAmount, setTicketAmount] = useState<number>(1);
@@ -29,13 +30,32 @@ const BuyTicket: React.FC = () => {
     setTickets([...tickets]);
   };
 
+  const handlerSuccess = async (tx: ExecuteResult) => {
+    window.open(`https://testnet.mintscan.io/juno-testnet/txs/${tx.transactionHash}`);
+    toast.dismiss('tx.success');
+  };
+
   const handlerBuyTickets = async () => {
     if (!draw) return;
-    await toast.promise(buyTickets(draw.id, draw.ticket_price, tickets), {
-      loading: 'Sending Tx',
-      success: <b>Tx Sucess</b>,
-      error: 'Error'
-    });
+    await toast.promise(
+      buyTickets(draw.id, draw.ticket_price, tickets),
+      {
+        loading: 'Buying tickets...',
+        success: (tx) => {
+          toast.dismiss('tx.loading');
+          return (
+            <b>
+              Tx Success{' '}
+              <span className="cursor-pointer" onClick={() => handlerSuccess(tx as ExecuteResult)}>
+                [_↗]
+              </span>
+            </b>
+          );
+        },
+        error: 'Error'
+      },
+      { success: { duration: Infinity, id: 'tx.success' }, loading: { id: 'tx.loading' } }
+    );
     navigate('/results?tickets');
   };
 

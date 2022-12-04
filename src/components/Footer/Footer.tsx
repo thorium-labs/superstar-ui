@@ -15,9 +15,9 @@ const Footer: React.FC = () => {
         <div className="flex gap-4">
           {social.map(({ url, icon }, i) => {
             return (
-              <a key={i} href={url}>
+              <i key={i} onClick={() => window.open(url)}>
                 {icon}
-              </a>
+              </i>
             );
           })}
         </div>
