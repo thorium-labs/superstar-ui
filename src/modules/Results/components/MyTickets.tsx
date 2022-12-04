@@ -1,5 +1,5 @@
 import { format } from 'date-fns';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { GradientButton } from '../../../components/Buttons';
 import StarsButton from '../../../components/Buttons/StarsButton';
@@ -7,13 +7,14 @@ import { GoBack, GoForward, GoTotallyBack, GoTotallyForward } from '../../../com
 import { Draw, TicketResult } from '../../../interfaces/lottery.interface';
 import { useCosmWasm } from '../../../providers/CosmWasmProvider';
 import { useWallet } from '../../../providers/WalletProvider';
+import { amountToNormal } from '../../../utils/calculateCoin';
 import SmallTicketContainer from './SmallTicketContainer';
 // @ts-ignore
 import ReactSlidy from 'react-slidy';
 import 'react-slidy/lib/styles.css';
 
 const MyTickets: React.FC = () => {
-  const { getCurrentDraw, getDrawInfo, checkDrawWinner } = useCosmWasm();
+  const { getCurrentDraw, getDrawInfo, checkDrawWinner, claimPrize } = useCosmWasm();
   const { connectWallet, address } = useWallet();
   const [currentDraw, setCurrentDraw] = useState<Draw>();
   const [currentUserTicket, setCurrentUserTicket] = useState<TicketResult[]>();
@@ -58,6 +59,22 @@ const MyTickets: React.FC = () => {
     setDrawUserTicket(await checkDrawWinner(currentDraw?.id - 1));
     setDrawInfo(await getDrawInfo(currentDraw?.id - 1));
   };
+
+  const prizePerTicket = useMemo(
+    () => drawInfo?.prize_per_match?.map((prize, i) => Math.round(Number(prize) / (drawInfo.winners_per_match?.[i] || 1))),
+    [drawInfo]
+  );
+
+  const totalPrize = useMemo(
+    () =>
+      amountToNormal(
+        drawUserTicket?.reduce((acc, ticket) => {
+          const prize = prizePerTicket?.[ticket.matches - 1] || 0;
+          return acc + prize;
+        }, 0) as number
+      ),
+    [drawUserTicket, prizePerTicket]
+  );
 
   if (!address) {
     return (
@@ -151,16 +168,27 @@ const MyTickets: React.FC = () => {
                         );
                       })}
                     </div>
-                    <p className="flex items-center justify-center">{ticket.matches}</p>
+                    <p className="flex items-center justify-center">
+                      {ticket.matches && prizePerTicket ? amountToNormal(prizePerTicket[ticket.matches - 1]) : 0}{' '}
+                      {drawInfo.ticket_price.denom.slice(1)}
+                    </p>
                   </div>
                 );
               })}
               <div className=" bg-gradient-to-r from-ss-orange-500/80 to-orange-500/80 h-[2px] rounded-xl mb-[2rem]" />
-              <div className=" grid grid-cols-3 px-4 py-2 rounded-lg  text-lg">
-                <p className="text-center text-stone-400">Total ticket prize </p>
-                <p className="text-center text-2xl font-bold">0.005 {drawInfo.total_prize.denom.slice(1)}</p>
-                <GradientButton className="w-fit px-20">Claim!</GradientButton>
-              </div>
+              {Number(totalPrize) > 0 && (
+                <div className=" grid grid-cols-3 px-4 py-2 rounded-lg  text-lg">
+                  <p className="text-center text-stone-400">Total ticket prize </p>
+
+                  <p className="text-center text-2xl font-bold">
+                    {totalPrize} {drawInfo.total_prize.denom.slice(1)}
+                  </p>
+
+                  <GradientButton className="w-fit px-20" onClick={() => claimPrize(drawInfo.id)}>
+                    Claim!
+                  </GradientButton>
+                </div>
+              )}
             </>
           ) : (
             <div className="bg-stone-700/20 backdrop-blur rounded-lg p-4 flex items-center justify-center ">
