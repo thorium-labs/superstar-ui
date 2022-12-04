@@ -1,22 +1,15 @@
-import { format } from "date-fns";
-import React, { useEffect, useState } from "react";
-import {
-  GoBack,
-  GoForward,
-  GoTotallyBack,
-  GoTotallyForward,
-} from "../../../components/Icons";
-import { Draw } from "../../../interfaces/lottery.interface";
-import { useCosmWasm } from "../../../providers/CosmWasmProvider";
-import { amountToNormal } from "../../../utils/calculateCoin";
+import { format } from 'date-fns';
+import React, { useEffect, useState } from 'react';
+import { GoBack, GoForward, GoTotallyBack, GoTotallyForward } from '../../../components/Icons';
+import { Draw } from '../../../interfaces/lottery.interface';
+import { useCosmWasm } from '../../../providers/CosmWasmProvider';
+import { amountToNormal } from '../../../utils/calculateCoin';
 
 const BlackBall: React.FC<{ num: number }> = ({ num }) => {
   return (
     <div className="relative">
       <img src="assets/stone-ball.png" className="w-[3.5rem] h-[3.5rem]" />
-      <p className="absolute top-0 right-0 left-0 bottom-0 m-auto flex items-center justify-center text-2xl text-stone-50 font-bold">
-        {num}
-      </p>
+      <p className="absolute top-0 right-0 left-0 bottom-0 m-auto flex items-center justify-center text-2xl text-stone-50 font-bold">{num}</p>
     </div>
   );
 };
@@ -65,28 +58,16 @@ const RecentDraws: React.FC = () => {
         </p>
         <div className="flex gap-2">
           <button>
-            <GoTotallyBack
-              className="w-[24px] h-[24px] hover:text-ss-orange-500"
-              onClick={goFirst}
-            />
+            <GoTotallyBack className="w-[24px] h-[24px] hover:text-ss-orange-500" onClick={goFirst} />
           </button>
           <button>
-            <GoBack
-              className="w-[24px] h-[24px] hover:text-ss-orange-500"
-              onClick={goBack}
-            />
+            <GoBack className="w-[24px] h-[24px] hover:text-ss-orange-500" onClick={goBack} />
           </button>
           <button>
-            <GoForward
-              className="w-[24px] h-[24px] hover:text-ss-orange-500"
-              onClick={goNext}
-            />
+            <GoForward className="w-[24px] h-[24px] hover:text-ss-orange-500" onClick={goNext} />
           </button>
           <button>
-            <GoTotallyForward
-              className="w-[24px] h-[24px] hover:text-ss-orange-500"
-              onClick={goLast}
-            />
+            <GoTotallyForward className="w-[24px] h-[24px] hover:text-ss-orange-500" onClick={goLast} />
           </button>
         </div>
       </div>
@@ -95,39 +76,22 @@ const RecentDraws: React.FC = () => {
           <div className="flex flex-col items-center p-4 justify-center rounded-t-lg bg-gradient-to-tl from-ss-orange-500/80 to-orange-500/80 px-2 relative">
             <div className="uppercase text-md font-bold text-stone-900 w-full flex justify-between px-2">
               <p>{drawInfo.status}</p>
-              <p>
-                {format(
-                  new Date(
-                    +(drawInfo?.end_time as { at_time: string }).at_time / 1e6
-                  ),
-                  "LLL d, yyyy"
-                )}
-              </p>
+              <p>{format(new Date(+(drawInfo?.end_time as { at_time: string }).at_time / 1e6), 'LLL d, yyyy')}</p>
             </div>
             <p className="uppercase text-xl font-bold ">Winner Number</p>
             <div className="flex gap-2 my-4">
               {[...(drawInfo?.winner_number as string)].map((num, i) => (
-                <BlackBall
-                  key={drawInfo?.id + "_number_" + i}
-                  num={parseInt(num)}
-                />
+                <BlackBall key={drawInfo?.id + '_number_' + i} num={parseInt(num)} />
               ))}
             </div>
             <div className="flex gap-8">
               <div className="text-xl flex items-center flex-col justify-center">
                 <p className="">Nº Winners</p>
-                <p className="text-stone-900 font-bold">
-                  {drawInfo.winners_per_match?.reduce(
-                    (acc, cur) => acc + cur,
-                    0
-                  )}
-                </p>
+                <p className="text-stone-900 font-bold">{drawInfo.winners_per_match?.reduce((acc, cur) => acc + cur, 0)}</p>
               </div>
               <div className="text-xl flex items-center flex-col justify-center">
                 <p className="">Nº Tickets</p>
-                <p className="text-stone-900 font-bold">
-                  {drawInfo.total_tickets}
-                </p>
+                <p className="text-stone-900 font-bold">{drawInfo.total_tickets}</p>
               </div>
             </div>
           </div>
@@ -141,36 +105,21 @@ const RecentDraws: React.FC = () => {
             </div>
             <div className="w-full grid grid-cols-3 mt-4 gap-x-4 gap-y-12">
               {Array.from({ length: 6 }).map((_, i) => {
-                const matchPrize = amountToNormal(
-                  drawInfo?.prize_per_match?.[i] as string
-                );
-                const winningTickets = (drawInfo.winners_per_match as number[])[
-                  i
-                ];
-                const eachTicketPrize = Number(matchPrize) * winningTickets;
+                const matchPrize = amountToNormal(drawInfo?.prize_per_match?.[i] as string);
+                const winningTickets = (drawInfo.winners_per_match as number[])[i];
+                const eachTicketPrize = !(Number(matchPrize) * winningTickets) ? matchPrize : Number(matchPrize) * winningTickets;
                 const denom = drawInfo.total_prize?.denom.slice(1);
                 return (
-                  <div
-                    className="flex items-center justify-center flex-col max-w-fit mx-auto"
-                    key={`matchContainer${i}`}
-                  >
-                    <h6 className="text-stone-400 text-sm uppercase">
-                      Mach in {i + 1}
-                    </h6>
+                  <div className="flex items-center justify-center flex-col max-w-fit mx-auto" key={`matchContainer${i}`}>
+                    <h6 className="text-stone-400 text-sm uppercase">Mach in {i + 1}</h6>
                     <div className="flex mt-2 gap-1">
                       {Array.from({ length: 6 }).map((_, indexBall) => {
                         return (
-                          <React.Fragment key={"balls_" + indexBall}>
+                          <React.Fragment key={'balls_' + indexBall}>
                             {indexBall <= i ? (
-                              <img
-                                src="assets/orange-ball.png"
-                                className="w-[1.5rem]"
-                              />
+                              <img src="assets/orange-ball.png" className="w-[1.5rem]" />
                             ) : (
-                              <img
-                                src="assets/stone-ball.png"
-                                className="w-[1.5rem]"
-                              />
+                              <img src="assets/stone-ball.png" className="w-[1.5rem]" />
                             )}
                           </React.Fragment>
                         );
