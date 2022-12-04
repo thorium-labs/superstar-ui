@@ -6,11 +6,13 @@ import RecentDrawsCard from "./components/RecentDrawsCard";
 import RecentTicketsPurchased from "./components/RecentTicketsPurchasedCard";
 import RecentWinnersCard from "./components/RecentWinnersCard";
 import { Draw } from "../../interfaces/lottery.interface";
+import { useWallet } from "../../providers/WalletProvider";
 import { getRecentPurchases, getRecentWinners } from "../../services/indexer";
 import { Purchase, Winner } from "../../interfaces/indexer.interface";
 import "./Home.css";
 
 const Home: React.FC = () => {
+  const { chainInfo } = useWallet();
   const { getLastDraws, getCurrentDraw } = useCosmWasm();
   const [lastDraw, setLastDraw] = useState<Draw>();
   const [recentDraws, setRecentDraws] = useState<Draw[]>([]);
@@ -44,7 +46,7 @@ const Home: React.FC = () => {
             <span className="text-ss-orange-500">Super</span>
             <span className="text-orange-500">Star</span>
           </h1>
-          <h2 className="text-stone-400 text-end">A decentralized platform lottery on Osmosis blockchain</h2>
+          <h2 className="text-stone-400 text-end">A decentralized platform lottery on {chainInfo.chainName} blockchain</h2>
         </div>
       </div>
       <DrawPresent draw={lastDraw} />
