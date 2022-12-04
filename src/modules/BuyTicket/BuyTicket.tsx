@@ -98,7 +98,9 @@ const BuyTicket: React.FC = () => {
             </div>
             <p className="uppercase">
               {ticketAmount *
-                amountToNormal(draw?.ticket_price.amount as string)}{" "}
+                Number(
+                  amountToNormal(draw?.ticket_price.amount as string)
+                )}{" "}
               <span className="text-ss-orange-500">
                 {balance?.denom.slice(1)}
               </span>
