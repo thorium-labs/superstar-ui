@@ -87,7 +87,10 @@ const BuyTicket: React.FC = () => {
               <span className="text-ss-orange-500">{balance?.denom.slice(1)}</span>
             </p>
           </div>
-          <GradientButton onClick={() => draw && buyTickets(draw.id, draw.ticket_price, tickets)} disabled={!address}>
+          <GradientButton
+            onClick={() => draw && buyTickets(draw.id, draw.ticket_price, tickets)}
+            disabled={!address || draw?.status === 'pending'}
+          >
             Pay now
           </GradientButton>
         </div>
