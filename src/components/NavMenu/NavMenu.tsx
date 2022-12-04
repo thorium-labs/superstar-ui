@@ -46,7 +46,7 @@ const NavMenu: React.FC = () => {
 
   return (
     <>
-      <div className="min-h-[72px] w-full h-full" />
+      <div className="min-h-[72px] w-full" />
       <nav className={clsx('nav min-h-8 py-4 px-12 flex items-center justify-between w-full bg-transparent fixed top-0 z-40 backdrop-blur')}>
         <Link to="/" className="flex items-center justify-center">
           <Logo className="logo" />
