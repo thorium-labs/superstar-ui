@@ -18,7 +18,7 @@ interface CosmWasmState {
 }
 
 export const CosmWasmContext = React.createContext<CosmWasmState | null>(null);
-const lotteryAddr = "juno1t4u7f5ad8ez0uc05xx4qlx0sfyc2u7rxqp37vrfxnymuj2thva3s5w7f0s";
+const lotteryAddr = "juno1nakcl7mwca64wuev7vtw7vvxexjftmaamktt8a2fseakesr3s8asuhr5cq";
 
 const CosmWasmProvider: React.FC<PropsWithChildren<{}>> = ({ children }) => {
   const { signer, address, chainInfo } = useWallet();
@@ -104,7 +104,6 @@ const CosmWasmProvider: React.FC<PropsWithChildren<{}>> = ({ children }) => {
         gasPrice: GasPrice.fromString(chainInfo.defaultGasPrice + chainInfo.feeToken),
       });
       const httpClient = new HttpBatchClient(chainInfo.rpcUrl, { batchSizeLimit: 10 });
-
       const queryClient = QueryClient.withExtensions(await Tendermint34Client.create(httpClient), setupWasmExtension);
       setCosmWasmClient(client);
       setQueryClient(queryClient);

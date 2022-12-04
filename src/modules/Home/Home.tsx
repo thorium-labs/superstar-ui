@@ -6,15 +6,19 @@ import RecentDrawsCard from "./components/RecentDrawsCard";
 import RecentTicketsPurchased from "./components/RecentTicketsPurchasedCard";
 import RecentWinnersCard from "./components/RecentWinnersCard";
 import { Draw } from "../../interfaces/lottery.interface";
+import { getRecentPurchases, getRecentWinners } from "../../services/indexer";
+import { Purchase, Winner } from "../../interfaces/indexer.interface";
 import "./Home.css";
 
 const Home: React.FC = () => {
   const { getLastDraws, getCurrentDraw } = useCosmWasm();
   const [lastDraw, setLastDraw] = useState<Draw>();
   const [recentDraws, setRecentDraws] = useState<Draw[]>([]);
+  const [recentTickets, setRecentTickets] = useState<Purchase[]>([]);
+  const [recentWinners, setRecentWinners] = useState<Winner[]>([]);
 
   useEffect(() => {
-    const loadDraws = async () => {
+    const fetchData = async () => {
       const draw = await getCurrentDraw();
       if (!draw) return;
       setLastDraw(draw);
@@ -23,8 +27,14 @@ const Home: React.FC = () => {
       setRecentDraws(draws);
     };
 
-    loadDraws();
+    fetchData();
   }, [getLastDraws, getCurrentDraw]);
+
+  useEffect(() => {
+    getRecentPurchases(4).then(setRecentTickets);
+    getRecentWinners(4).then(setRecentWinners);
+  }, []);
+
   return (
     <div className="flex flex-col gap-24">
       <div className="header min-h-[5rem] flex items-center">
@@ -48,17 +58,15 @@ const Home: React.FC = () => {
       <div className="grid grid-cols-2 gap-4">
         <div className="grid grid-cols-2 gap-4">
           <h2 className="col-span-2 text-3xl">Recent Winners</h2>
-          <RecentWinnersCard />
-          <RecentWinnersCard />
-          <RecentWinnersCard />
-          <RecentWinnersCard />
+          {recentWinners.map((winner, i) => (
+            <RecentWinnersCard key={winner.prize + i} winner={winner} />
+          ))}
         </div>
         <div className="grid grid-cols-2 gap-4">
           <h2 className="col-span-2 text-3xl">Recent Purchased Tickets</h2>
-          <RecentTicketsPurchased />
-          <RecentTicketsPurchased />
-          <RecentTicketsPurchased />
-          <RecentTicketsPurchased />
+          {recentTickets.map((purchase, i) => (
+            <RecentTicketsPurchased key={purchase.buyer + i} purchase={purchase} />
+          ))}
         </div>
       </div>
     </div>
