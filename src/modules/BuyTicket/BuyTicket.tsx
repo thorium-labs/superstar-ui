@@ -11,18 +11,25 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
 import { ExecuteResult } from '@cosmjs/cosmwasm-stargate';
 
+const generateRandomTicket = () => Array.from({ length: 6 }, () => Math.floor(Math.random() * 9)).join('');
+
 const BuyTicket: React.FC = () => {
   const [ticketAmount, setTicketAmount] = useState<number>(1);
-  const [tickets, setTickets] = useState<string[]>([]);
+  const [tickets, setTickets] = useState<string[]>([generateRandomTicket()]);
   const [draw, setDraw] = useState<Draw>();
   const { address } = useWallet();
   const navigate = useNavigate();
   const { getCurrentDraw, buyTickets, balance } = useCosmWasm();
 
+  console.log(tickets);
   const addTicket = (newTicketAmount: number) => {
     setTicketAmount(newTicketAmount);
-    const ticketNumber = Array.from({ length: 6 }, () => Math.floor(Math.random() * 9)).join('');
-    setTickets([...tickets, ticketNumber]);
+    setTickets([...tickets, generateRandomTicket()]);
+  };
+
+  const removeTicket = (newTicketAmount: number) => {
+    setTicketAmount(newTicketAmount);
+    setTickets(tickets.slice(0, newTicketAmount));
   };
 
   const updateTicket = (ticketNumber: string, ticketPosition: number) => {
@@ -54,8 +61,9 @@ const BuyTicket: React.FC = () => {
         },
         error: 'Error'
       },
-      { success: { duration: Infinity, id: 'tx.success' }, loading: { id: 'tx.loading' } }
+      { success: { id: 'tx.success' }, loading: { id: 'tx.loading' } }
     );
+    console.log(tickets);
     navigate('/results?tickets');
   };
 
@@ -69,7 +77,7 @@ const BuyTicket: React.FC = () => {
       <h1 className="w-full text-5xl mb-8">Buy tickets</h1>
       <div className="max-w-[800px]">
         <div className="rounded-lg border border-stone-600/50 flex items-center justify-between p-2">
-          <SimpleCounter changeNum={addTicket} maxNumber={25} initialValue={ticketAmount} minNumber={1} />
+          <SimpleCounter addTicket={addTicket} removeTicket={removeTicket} maxNumber={25} initialValue={ticketAmount} minNumber={1} />
           <h4>ADD TICKETS</h4>
           <p className="text-stone-200">25 tickets max.</p>
         </div>

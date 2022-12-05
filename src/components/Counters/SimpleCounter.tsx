@@ -1,42 +1,41 @@
-import clsx from "clsx";
-import React, { useCallback, useEffect, useState } from "react";
-import MinusRounded from "../Icons/MinusRounded";
-import PlusRounded from "../Icons/PlusRounded";
+import clsx from 'clsx';
+import React, { useCallback, useEffect, useState } from 'react';
+import MinusRounded from '../Icons/MinusRounded';
+import PlusRounded from '../Icons/PlusRounded';
 
 interface Props {
   maxNumber?: number;
   minNumber?: number;
   initialValue?: number;
-  changeNum: (n: number) => void;
+  addTicket: (n: number) => void;
+  removeTicket: (n: number) => void;
 }
 
-const SimpleCounter: React.FC<
-  Props & React.HtmlHTMLAttributes<HTMLDivElement>
-> = ({ changeNum, initialValue, maxNumber, minNumber, className }) => {
+const SimpleCounter: React.FC<Props & React.HtmlHTMLAttributes<HTMLDivElement>> = ({
+  addTicket,
+  removeTicket,
+  initialValue,
+  maxNumber,
+  minNumber,
+  className
+}) => {
   let [count, setCount] = useState<number>(initialValue || 0);
 
   const minus = useCallback(() => {
     if (count === 0) return;
     if (minNumber && count === minNumber) return;
     setCount(count - 1);
-  }, [count]);
+    removeTicket(count - 1);
+  }, [removeTicket, count]);
 
   const plus = useCallback(() => {
     if (maxNumber && count === maxNumber) return;
     setCount(count + 1);
-  }, [count]);
-
-  useEffect(() => {
-    changeNum(count);
-  }, [count]);
+    addTicket(count + 1);
+  }, [addTicket, count]);
 
   return (
-    <div
-      className={clsx(
-        "flex gap-1 items-center justify-center",
-        className && className
-      )}
-    >
+    <div className={clsx('flex gap-1 items-center justify-center', className && className)}>
       <button className="outline-none" onClick={minus}>
         <MinusRounded className="w-[24px] fill-stone-400 hover:fill-stone-50" />
       </button>
