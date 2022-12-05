@@ -10,6 +10,7 @@ import { useWallet } from '../../../providers/WalletProvider';
 import { amountToNormal } from '../../../utils/calculateCoin';
 import SmallTicketContainer from './SmallTicketContainer';
 import { getClaimedPrize } from '../../../services/indexer';
+import { Spinner } from '../../../components/Spinner';
 // @ts-ignore
 import ReactSlidy from 'react-slidy';
 import 'react-slidy/lib/styles.css';
@@ -91,6 +92,8 @@ const MyTickets: React.FC = () => {
       </div>
     );
   }
+
+  if (!drawInfo) return <Spinner />;
 
   function CustomArrowLeft(props: Record<string, unknown>) {
     return <GoBack height="2rem" width="2rem" {...props} />;

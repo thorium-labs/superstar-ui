@@ -9,7 +9,7 @@ import { Toaster } from 'react-hot-toast';
 const App: React.FC = () => {
   return (
     <AppProvider>
-      <Suspense fallback={<Spinner />}>
+      <Suspense fallback={<Spinner className="min-w-screen min-h-screen" />}>
         <BrowserRouter>
           <Layout>
             <AppRouter />
