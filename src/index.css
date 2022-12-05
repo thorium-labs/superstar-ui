@@ -61,8 +61,10 @@ h6 {
   padding: 0 2rem;
 }
 
-.react-Slidy-arrow {
+.react-Slidy-arrow.react-Slidy-arrowRight,
+.react-Slidy-arrow.react-Slidy-arrowLeft {
   opacity: 0.5;
+  cursor: pointer;
 }
 
 ::-moz-selection {
