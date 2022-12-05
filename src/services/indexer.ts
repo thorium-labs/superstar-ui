@@ -27,6 +27,17 @@ const queryRecentWinners = gql`
   }
 `;
 
+const queryClaimedPrize = gql`
+  query claimedPrize($id: String!) {
+    winners(filter: { id: { equalTo: $id } }) {
+      nodes {
+        prize
+        address
+      }
+    }
+  }
+`;
+
 export const getRecentPurchases = async (limit: number) => {
   const data = await request(INDEXER_URL, queryRecentPurchases, {
     limit
@@ -39,4 +50,11 @@ export const getRecentWinners = async (limit: number) => {
     limit
   });
   return data.winners.nodes;
+};
+
+export const getClaimedPrize = async (id: string) => {
+  const data = await request(INDEXER_URL, queryClaimedPrize, {
+    id
+  });
+  return data.winners.nodes[0];
 };

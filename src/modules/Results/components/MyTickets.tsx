@@ -1,5 +1,5 @@
 import { format } from 'date-fns';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { GradientButton } from '../../../components/Buttons';
 import StarsButton from '../../../components/Buttons/StarsButton';
@@ -9,6 +9,7 @@ import { useCosmWasm } from '../../../providers/CosmWasmProvider';
 import { useWallet } from '../../../providers/WalletProvider';
 import { amountToNormal } from '../../../utils/calculateCoin';
 import SmallTicketContainer from './SmallTicketContainer';
+import { getClaimedPrize } from '../../../services/indexer';
 // @ts-ignore
 import ReactSlidy from 'react-slidy';
 import 'react-slidy/lib/styles.css';
@@ -20,45 +21,49 @@ const MyTickets: React.FC = () => {
   const [currentUserTicket, setCurrentUserTicket] = useState<TicketResult[]>();
   const [drawInfo, setDrawInfo] = useState<Draw>();
   const [drawUserTicket, setDrawUserTicket] = useState<TicketResult[]>();
+  const [isClaimed, setIsClaimed] = useState<boolean>(false);
   const navigate = useNavigate();
 
   useEffect(() => {
     if (!address) return;
     const loadCurrentDraw = async () => {
       const draw = await getCurrentDraw();
+      await fetchInfo(draw.id - 1);
       setCurrentDraw(draw);
-      setDrawInfo(await getDrawInfo(draw.id - 1));
-      setDrawUserTicket(await checkDrawWinner(draw.id - 1));
       setCurrentUserTicket(await checkDrawWinner(draw.id));
     };
     loadCurrentDraw();
   }, [getCurrentDraw, checkDrawWinner]);
 
   const goBack = async () => {
-    if (!drawInfo?.id) return;
-    if (drawInfo.id === 1) return;
-    setDrawUserTicket(await checkDrawWinner(drawInfo?.id - 1));
-    setDrawInfo(await getDrawInfo(drawInfo?.id - 1));
+    if (!drawInfo?.id || drawInfo.id === 1) return;
+    await fetchInfo(drawInfo?.id - 1);
   };
 
   const goNext = async () => {
     if (!drawInfo?.id || !currentDraw?.id) return;
     if (drawInfo.id === currentDraw?.id - 1) return;
-    setDrawUserTicket(await checkDrawWinner(drawInfo?.id + 1));
-    setDrawInfo(await getDrawInfo(drawInfo?.id + 1));
+    await fetchInfo(drawInfo?.id + 1);
   };
 
   const goFirst = async () => {
-    if (!drawInfo?.id) return;
-    setDrawUserTicket(await checkDrawWinner(1));
-    setDrawInfo(await getDrawInfo(1));
+    await fetchInfo(1);
   };
 
   const goLast = async () => {
-    if (!drawInfo?.id || !currentDraw?.id) return;
-    setDrawUserTicket(await checkDrawWinner(currentDraw?.id - 1));
-    setDrawInfo(await getDrawInfo(currentDraw?.id - 1));
+    if (!currentDraw?.id) return;
+    await fetchInfo(currentDraw?.id - 1);
   };
+
+  const fetchInfo = useCallback(
+    async (drawId: number) => {
+      const claimedPrize = await getClaimedPrize(`${address}-${drawId}`);
+      setIsClaimed(!!claimedPrize);
+      setDrawUserTicket(await checkDrawWinner(drawId));
+      setDrawInfo(await getDrawInfo(drawId));
+    },
+    [setIsClaimed, setDrawUserTicket, setDrawInfo, checkDrawWinner, getDrawInfo]
+  );
 
   const prizePerTicket = useMemo(
     () => drawInfo?.prize_per_match?.map((prize, i) => Math.round(Number(prize) / (drawInfo.winners_per_match?.[i] || 1))),
@@ -175,19 +180,22 @@ const MyTickets: React.FC = () => {
                   </div>
                 );
               })}
-              <div className=" bg-gradient-to-r from-ss-orange-500/80 to-orange-500/80 h-[2px] rounded-xl mb-[2rem]" />
-              {Number(totalPrize) > 0 && (
-                <div className=" grid grid-cols-3 px-4 py-2 rounded-lg  text-lg">
-                  <p className="text-center text-stone-400">Total ticket prize </p>
 
-                  <p className="text-center text-2xl font-bold">
-                    {totalPrize} {drawInfo.total_prize.denom.slice(1)}
-                  </p>
+              {Number(totalPrize) > 0 && !isClaimed && (
+                <>
+                  <div className=" bg-gradient-to-r from-ss-orange-500/80 to-orange-500/80 h-[2px] rounded-xl mb-[2rem]" />
+                  <div className=" grid grid-cols-3 px-4 py-2 rounded-lg  text-lg">
+                    <p className="text-center text-stone-400">Total ticket prize </p>
 
-                  <GradientButton className="w-fit px-20" onClick={() => claimPrize(drawInfo.id)}>
-                    Claim!
-                  </GradientButton>
-                </div>
+                    <p className="text-center text-2xl font-bold">
+                      {totalPrize} {drawInfo.total_prize.denom.slice(1)}
+                    </p>
+
+                    <GradientButton className="w-fit px-20" onClick={() => claimPrize(drawInfo.id)}>
+                      Claim!
+                    </GradientButton>
+                  </div>
+                </>
               )}
             </>
           ) : (
