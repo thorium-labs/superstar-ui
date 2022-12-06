@@ -11,6 +11,7 @@ import { amountToNormal } from '../../../utils/calculateCoin';
 import SmallTicketContainer from './SmallTicketContainer';
 import { getClaimedPrize } from '../../../services/indexer';
 import { Spinner } from '../../../components/Spinner';
+import { getRandomId } from '../../../utils/getRandomId';
 // @ts-ignore
 import ReactSlidy from 'react-slidy';
 import 'react-slidy/lib/styles.css';
@@ -112,7 +113,7 @@ const MyTickets: React.FC = () => {
             <div className="my-8">
               <ReactSlidy numOfSlides={3} ArrowLeft={CustomArrowLeft} ArrowRight={CustomArrowRight}>
                 {currentUserTicket.map(({ ticket_number }, i) => {
-                  return <SmallTicketContainer number={ticket_number} draw={currentDraw.id} />;
+                  return <SmallTicketContainer key={getRandomId()} number={ticket_number} draw={currentDraw.id} />;
                 })}
               </ReactSlidy>
             </div>

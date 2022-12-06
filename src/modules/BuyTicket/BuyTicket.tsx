@@ -21,7 +21,6 @@ const BuyTicket: React.FC = () => {
   const navigate = useNavigate();
   const { getCurrentDraw, buyTickets, balance } = useCosmWasm();
 
-  console.log(tickets);
   const addTicket = (newTicketAmount: number) => {
     setTicketAmount(newTicketAmount);
     setTickets([...tickets, generateRandomTicket()]);
@@ -63,7 +62,6 @@ const BuyTicket: React.FC = () => {
       },
       { success: { id: 'tx.success' }, loading: { id: 'tx.loading' } }
     );
-    console.log(tickets);
     navigate('/results?tickets');
   };
 
