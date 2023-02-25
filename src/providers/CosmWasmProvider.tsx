@@ -91,7 +91,7 @@ const CosmWasmProvider: React.FC<PropsWithChildren<{}>> = ({ children }) => {
   const buyTickets = useCallback(
     async (drawId: number, ticketPrice: Coin, tickets: string[]) => {
       const amount = Math.ceil(tickets.length * Number(ticketPrice.amount));
-      return await cosmWasmClient?.execute(address as string, lotteryAddr, { buy_ticket: { draw_id: drawId, tickets } }, 'auto', undefined, [
+      return await cosmWasmClient?.execute(address as string, lotteryAddr, { buy_tickets: { draw_id: drawId, tickets } }, 'auto', undefined, [
         coin(amount, ticketPrice.denom)
       ]);
     },

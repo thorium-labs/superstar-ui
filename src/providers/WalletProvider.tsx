@@ -1,4 +1,3 @@
-import { SigningCosmWasmClient } from "@cosmjs/cosmwasm-stargate";
 import { OfflineSigner } from "@cosmjs/proto-signing";
 import React, { PropsWithChildren, useEffect, useState } from "react";
 import { useLocalStorage } from "react-use";

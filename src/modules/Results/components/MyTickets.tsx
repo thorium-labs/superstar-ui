@@ -15,6 +15,7 @@ import { getRandomId } from '../../../utils/getRandomId';
 // @ts-ignore
 import ReactSlidy from 'react-slidy';
 import 'react-slidy/lib/styles.css';
+import toast from 'react-hot-toast';
 
 const MyTickets: React.FC = () => {
   const { getCurrentDraw, getDrawInfo, checkDrawWinner, claimPrize } = useCosmWasm();
@@ -30,6 +31,7 @@ const MyTickets: React.FC = () => {
     if (!address) return;
     const loadCurrentDraw = async () => {
       const draw = await getCurrentDraw();
+      if (!draw) return;
       await fetchInfo(draw.id - 1);
       setCurrentDraw(draw);
       setCurrentUserTicket(await checkDrawWinner(draw.id));
@@ -59,13 +61,33 @@ const MyTickets: React.FC = () => {
 
   const fetchInfo = useCallback(
     async (drawId: number) => {
-      const claimedPrize = await getClaimedPrize(`${address}-${drawId}`);
+      const claimedPrize = await getClaimedPrize(String(drawId), address as string);
       setIsClaimed(!!claimedPrize);
       setDrawUserTicket(await checkDrawWinner(drawId));
       setDrawInfo(await getDrawInfo(drawId));
     },
     [setIsClaimed, setDrawUserTicket, setDrawInfo, checkDrawWinner, getDrawInfo]
   );
+
+  const claim = useCallback(async () => {
+    if (!drawInfo?.id) return;
+    await toast.promise(claimPrize(drawInfo.id), {
+      loading: 'Claiming...',
+      success: (tx) => {
+        toast.dismiss('tx.loading');
+        return (
+          <b>
+            Tx Success{' '}
+            <a className="cursor-pointer" target="_blank" href={`https://testnet.mintscan.io/juno-testnet/txs/${tx?.transactionHash}`}>
+              Check
+            </a>
+          </b>
+        );
+      },
+      error: 'Error'
+    });
+    setIsClaimed(true);
+  }, []);
 
   const prizePerTicket = useMemo(
     () => drawInfo?.prize_per_match?.map((prize, i) => Math.round(Number(prize) / (drawInfo.winners_per_match?.[i] || 1))),
@@ -168,7 +190,7 @@ const MyTickets: React.FC = () => {
                             <p className="absolute top-0 left-0 right-0 bottom-0 m-auto flex items-center justify-center font-bold text-lg">
                               {num}
                             </p>
-                            {ticket.matches === i + 1 ? (
+                            {ticket.matches >= i + 1 ? (
                               <img src="assets/orange-ball.png" className="w-[2rem]" />
                             ) : (
                               <img src="assets/stone-ball.png" className="w-[2rem]" />
@@ -195,7 +217,9 @@ const MyTickets: React.FC = () => {
                       {totalPrize} {drawInfo.total_prize.denom.slice(1)}
                     </p>
 
-                    <GradientButton className="w-fit px-20" onClick={() => claimPrize(drawInfo.id)}>
+                    <GradientButton className="w-fit px-20" onClick={
+                      () => claim()
+                    }>
                       Claim!
                     </GradientButton>
                   </div>
