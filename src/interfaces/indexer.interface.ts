@@ -1,6 +1,7 @@
 export interface Winner {
   id: string;
   drawId: string;
+  winner: string;
   prize: string;
 }
 

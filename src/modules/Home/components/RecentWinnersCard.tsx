@@ -21,7 +21,7 @@ const RecentWinnersCard: React.FC<Props> = ({ winner }) => {
       <p className="text-transparent bg-clip-text bg-gradient-to-r from-ss-orange-500/80 to-orange-500/80 text-2xl font-semibold">
         {amountToNormal(amount)} {denom}
       </p>
-      <p className="text-sm">{IntlAddress(winner.id)}</p>
+      <p className="text-sm">{IntlAddress(winner.winner)}</p>
     </div>
   );
 };

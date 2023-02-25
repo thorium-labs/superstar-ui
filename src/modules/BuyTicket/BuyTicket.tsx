@@ -8,8 +8,7 @@ import { amountToNormal } from '../../utils/calculateCoin';
 import BuyTicketContainer from './components/BuyTicketContainer';
 import DrawContainer from './components/DrawContainer';
 import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-hot-toast';
-import { ExecuteResult } from '@cosmjs/cosmwasm-stargate';
+import { useToast } from '../../hooks/useToast';
 
 const generateRandomTicket = () => Array.from({ length: 6 }, () => Math.floor(Math.random() * 9)).join('');
 
@@ -19,7 +18,8 @@ const BuyTicket: React.FC = () => {
   const [draw, setDraw] = useState<Draw>();
   const { address } = useWallet();
   const navigate = useNavigate();
-  const { getCurrentDraw, buyTickets, balance } = useCosmWasm();
+  const { toast } = useToast();
+  const { getCurrentDraw, buyTickets, balance, refreshBalance } = useCosmWasm();
 
   const addTicket = (newTicketAmount: number) => {
     setTicketAmount(newTicketAmount);
@@ -36,32 +36,10 @@ const BuyTicket: React.FC = () => {
     setTickets([...tickets]);
   };
 
-  const handlerSuccess = async (tx: ExecuteResult) => {
-    window.open(`https://testnet.mintscan.io/juno-testnet/txs/${tx.transactionHash}`);
-    toast.dismiss('tx.success');
-  };
-
   const handlerBuyTickets = async () => {
     if (!draw) return;
-    await toast.promise(
-      buyTickets(draw.id, draw.ticket_price, tickets),
-      {
-        loading: 'Buying tickets...',
-        success: (tx) => {
-          toast.dismiss('tx.loading');
-          return (
-            <b>
-              Tx Success{' '}
-              <span className="cursor-pointer" onClick={() => handlerSuccess(tx as ExecuteResult)}>
-                [_↗]
-              </span>
-            </b>
-          );
-        },
-        error: 'Error'
-      },
-      { success: { id: 'tx.success' }, loading: { id: 'tx.loading' } }
-    );
+    await toast.transaction(buyTickets(draw.id, draw.ticket_price, tickets));
+    await refreshBalance();
     navigate('/results?tickets');
   };
 

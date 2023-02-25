@@ -12,13 +12,13 @@ import SmallTicketContainer from './SmallTicketContainer';
 import { getClaimedPrize } from '../../../services/indexer';
 import { Spinner } from '../../../components/Spinner';
 import { getRandomId } from '../../../utils/getRandomId';
+import { useToast } from '../../../hooks/useToast';
 // @ts-ignore
 import ReactSlidy from 'react-slidy';
 import 'react-slidy/lib/styles.css';
-import toast from 'react-hot-toast';
 
 const MyTickets: React.FC = () => {
-  const { getCurrentDraw, getDrawInfo, checkDrawWinner, claimPrize } = useCosmWasm();
+  const { getCurrentDraw, getDrawInfo, checkDrawWinner, claimPrize, refreshBalance } = useCosmWasm();
   const { connectWallet, address } = useWallet();
   const [currentDraw, setCurrentDraw] = useState<Draw>();
   const [currentUserTicket, setCurrentUserTicket] = useState<TicketResult[]>();
@@ -26,6 +26,7 @@ const MyTickets: React.FC = () => {
   const [drawUserTicket, setDrawUserTicket] = useState<TicketResult[]>();
   const [isClaimed, setIsClaimed] = useState<boolean>(false);
   const navigate = useNavigate();
+  const { toast } = useToast();
 
   useEffect(() => {
     if (!address) return;
@@ -71,21 +72,8 @@ const MyTickets: React.FC = () => {
 
   const claim = useCallback(async () => {
     if (!drawInfo?.id) return;
-    await toast.promise(claimPrize(drawInfo.id), {
-      loading: 'Claiming...',
-      success: (tx) => {
-        toast.dismiss('tx.loading');
-        return (
-          <b>
-            Tx Success{' '}
-            <a className="cursor-pointer" target="_blank" href={`https://testnet.mintscan.io/juno-testnet/txs/${tx?.transactionHash}`}>
-              Check
-            </a>
-          </b>
-        );
-      },
-      error: 'Error'
-    });
+    await toast.transaction(claimPrize(drawInfo.id));
+    await refreshBalance();
     setIsClaimed(true);
   }, []);
 
@@ -217,9 +205,7 @@ const MyTickets: React.FC = () => {
                       {totalPrize} {drawInfo.total_prize.denom.slice(1)}
                     </p>
 
-                    <GradientButton className="w-fit px-20" onClick={
-                      () => claim()
-                    }>
+                    <GradientButton className="w-fit px-20" onClick={() => claim()}>
                       Claim!
                     </GradientButton>
                   </div>
