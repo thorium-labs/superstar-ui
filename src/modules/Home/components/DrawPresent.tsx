@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import StarsButton from '../../../components/Buttons/StarsButton';
 import { Draw } from '../../../interfaces/lottery.interface';
-import { useWallet } from '../../../providers/WalletProvider';
+import { useCosmWasm } from '../../../providers/CosmWasmProvider';
 import { amountToNormal } from '../../../utils/calculateCoin';
 import { calculateTimeLeft, initTimerValues, timerState } from '../../../utils/calculateTimeLeft';
 
@@ -11,7 +11,7 @@ interface Props {
 }
 
 const DrawPresent: React.FC<Props> = ({ draw }) => {
-  const { chainInfo } = useWallet();
+  const { denom } = useCosmWasm();
   const [timeLeft, setTimeLeft] = React.useState<timerState>(initTimerValues);
   const navigate = useNavigate();
 
@@ -27,7 +27,7 @@ const DrawPresent: React.FC<Props> = ({ draw }) => {
         <div className="min-w-[200px] flex flex-col items-center gap-2">
           <div className="flex items-center justify-center flex-col">
             <p className="text-4xl font-extrabold">{amountToNormal(draw?.total_prize.amount || 0)}</p>
-            <p className="text-center uppercase">{chainInfo.feeToken.slice(1)}</p>
+            <p className="text-center uppercase">{denom.slice(1)}</p>
           </div>
         </div>
         <span className="w-[2px] h-[6rem] bg-gradient-to-bl from-ss-orange-500 to-orange-500 rounded-lg" />

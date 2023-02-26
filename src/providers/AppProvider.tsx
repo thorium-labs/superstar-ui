@@ -1,12 +1,15 @@
 import React, { PropsWithChildren } from 'react';
+import { ChainProvider } from '@cosmos-kit/react';
+import { wallets as VectisWallet } from '@cosmos-kit/vectis';
+import { wallets as KeplrWallet } from '@cosmos-kit/keplr-extension';
+import { chains, assets } from 'chain-registry';
 import CosmWasmProvider from './CosmWasmProvider';
-import WalletProvider from './WalletProvider';
 
 const AppProvider: React.FC<PropsWithChildren<{}>> = ({ children }) => {
   return (
-    <WalletProvider>
+    <ChainProvider wallets={[...VectisWallet, ...KeplrWallet]} assetLists={assets} chains={chains}>
       <CosmWasmProvider>{children}</CosmWasmProvider>
-    </WalletProvider>
+    </ChainProvider>
   );
 };
 

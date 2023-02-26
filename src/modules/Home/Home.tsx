@@ -1,36 +1,35 @@
-import React, { useEffect, useState } from "react";
-import { useCosmWasm } from "../../providers/CosmWasmProvider";
-import DrawPresent from "./components/DrawPresent";
-import HowToPlay from "./components/HowToPlay";
-import RecentDrawsCard from "./components/RecentDrawsCard";
-import RecentTicketsPurchased from "./components/RecentTicketsPurchasedCard";
-import RecentWinnersCard from "./components/RecentWinnersCard";
-import { Draw } from "../../interfaces/lottery.interface";
-import { useWallet } from "../../providers/WalletProvider";
-import { getRecentPurchases, getRecentWinners } from "../../services/indexer";
-import { Purchase, Winner } from "../../interfaces/indexer.interface";
-import "./Home.css";
+import React, { useEffect, useState } from 'react';
+import { useCosmWasm } from '../../providers/CosmWasmProvider';
+import DrawPresent from './components/DrawPresent';
+import HowToPlay from './components/HowToPlay';
+import RecentDrawsCard from './components/RecentDrawsCard';
+import RecentTicketsPurchased from './components/RecentTicketsPurchasedCard';
+import RecentWinnersCard from './components/RecentWinnersCard';
+import { Draw } from '../../interfaces/lottery.interface';
+import { getRecentPurchases, getRecentWinners } from '../../services/indexer';
+import { Purchase, Winner } from '../../interfaces/indexer.interface';
+import './Home.css';
 
 const Home: React.FC = () => {
-  const { chainInfo } = useWallet();
-  const { getLastDraws, getCurrentDraw } = useCosmWasm();
+  const { queryService, chainName } = useCosmWasm();
   const [lastDraw, setLastDraw] = useState<Draw>();
   const [recentDraws, setRecentDraws] = useState<Draw[]>([]);
   const [recentTickets, setRecentTickets] = useState<Purchase[]>([]);
   const [recentWinners, setRecentWinners] = useState<Winner[]>([]);
 
   useEffect(() => {
+    if (!queryService) return;
     const fetchData = async () => {
-      const draw = await getCurrentDraw();
+      const draw = await queryService.getCurrentDraw();
       if (!draw) return;
       setLastDraw(draw);
 
-      const draws = await getLastDraws(draw?.id - 1, 4);
+      const draws = await queryService.getLastDraws(draw?.id - 1, 4);
       setRecentDraws(draws);
     };
 
     fetchData();
-  }, [getLastDraws, getCurrentDraw]);
+  }, [queryService]);
 
   useEffect(() => {
     getRecentPurchases(4).then(setRecentTickets);
@@ -46,7 +45,7 @@ const Home: React.FC = () => {
             <span className="text-ss-orange-500">Super</span>
             <span className="text-orange-500">Star</span>
           </h1>
-          <h2 className="text-stone-400 text-end">A decentralized platform lottery on {chainInfo.chainName} blockchain</h2>
+          <h2 className="text-stone-400 text-end">A decentralized platform lottery on {chainName} blockchain</h2>
         </div>
       </div>
       <DrawPresent draw={lastDraw} />

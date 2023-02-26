@@ -1,160 +1,77 @@
-import { ExecuteResult, setupWasmExtension, SigningCosmWasmClient, WasmExtension } from '@cosmjs/cosmwasm-stargate';
-import { GasPrice, coin, QueryClient } from '@cosmjs/stargate';
 import React, { PropsWithChildren, useCallback, useEffect, useState } from 'react';
-import { Coin, Config, Draw, TicketResult } from '../interfaces/lottery.interface';
-import { useWallet } from './WalletProvider';
-import { HttpBatchClient, Tendermint34Client } from '@cosmjs/tendermint-rpc';
+import { SuperStarQueryService, SuperStartExecuteService } from '../services/superstar';
+import { Coin } from '@cosmjs/proto-signing';
+import { useChain } from '@cosmos-kit/react';
+import { wallets as keplrWallets } from '@cosmos-kit/keplr-extension';
+import { wallets as VectisWallets } from '@cosmos-kit/vectis';
 
 interface CosmWasmState {
-  cosmWasmClient: SigningCosmWasmClient;
-  queryClient: QueryClient & WasmExtension;
-  getCurrentDraw: () => Promise<Draw>;
-  getDrawInfo: (drawId: number) => Promise<Draw | undefined>;
-  checkDrawWinner: (drawId: number) => Promise<TicketResult[]>;
-  getDrawUserTickets: (drawId: number) => Promise<string[]>;
-  buyTickets: (drawId: number, ticketPrice: Coin, tickets: string[]) => Promise<ExecuteResult | undefined>;
-  claimPrize: (drawId: number) => Promise<ExecuteResult | undefined>;
-  getLastDraws: (lastDraw: number, limit: number) => Promise<Draw[]>;
-  getConfig: () => Promise<Config>;
-  balance?: Coin;
+  executeService: SuperStartExecuteService;
+  queryService: SuperStarQueryService;
+  balance: Coin;
+  chainName: string;
+  denom: string;
+  address?: string;
+  connectWallet: () => void;
+  disconnectWallet: () => void;
   refreshBalance: () => void;
 }
 
 export const CosmWasmContext = React.createContext<CosmWasmState | null>(null);
-const lotteryAddr = import.meta.env.VITE_CONTRACT_ADDR;
 
 const CosmWasmProvider: React.FC<PropsWithChildren<{}>> = ({ children }) => {
-  const { signer, address, chainInfo } = useWallet();
-  const [cosmWasmClient, setCosmWasmClient] = useState<SigningCosmWasmClient>();
-  const [queryClient, setQueryClient] = useState<QueryClient & WasmExtension>();
-  const [balance, setBalance] = useState<Coin>();
+  const [executeService, setExecuteService] = useState<SuperStartExecuteService>();
+  const [queryService, setQueryService] = useState<SuperStarQueryService>();
+  const [balance, setBalance] = useState<Coin>({ amount: '0', denom: '' });
+  const [denom, setDenom] = useState<string>('');
+  const { connect, address, chain, getOfflineSignerAmino, disconnect } = useChain(import.meta.env.VITE_CHAIN_NAME);
+
+  useEffect(() => {
+    SuperStarQueryService.connect(chain).then(setQueryService);
+    const [{ denom }] = chain.fees?.fee_tokens || [];
+    setDenom(denom);
+  }, []);
+
+  useEffect(() => {
+    const loadExecuteService = async () => {
+      if (!queryService || !address) return;
+      const signer = await getOfflineSignerAmino(chain.chain_id);
+      const executeService = await SuperStartExecuteService.connectWithSigner(signer, chain);
+      await refreshBalance();
+      setExecuteService(executeService);
+    };
+    loadExecuteService();
+  }, [queryService, address]);
 
   const refreshBalance = useCallback(async () => {
-    if (!address) return;
-    const balance = await cosmWasmClient?.getBalance(address, chainInfo.feeToken);
-    setBalance(balance as Coin);
-  }, [cosmWasmClient, address, chainInfo]);
+    if (!queryService || !address) return setBalance({ amount: '0', denom });
+    const balance = await queryService.getBalance(address, denom);
+    setBalance(balance);
+  }, [address, queryService, denom]);
 
-  const getLastDraws = useCallback(
-    async (lastDraw: number, limit: number) => {
-      return await Promise.all(
-        Array.from({ length: limit }, (_, i) =>
-          queryClient?.wasm.queryContractSmart(lotteryAddr, {
-            get_draw: { id: lastDraw - i }
-          })
-        )
-      );
-    },
-    [queryClient]
-  );
-
-  const getConfig = useCallback(async () => {
-    return await queryClient?.wasm.queryContractSmart(lotteryAddr, {
-      get_config: {}
-    });
-  }, [queryClient]);
-
-  const getCurrentDraw = useCallback(async () => {
-    const value = await queryClient?.wasm.queryContractSmart(lotteryAddr, {
-      get_current_draw: {}
-    });
-    return value;
-  }, [queryClient]);
-
-  const getDrawInfo = useCallback(
-    async (drawId: number) => {
-      return await queryClient?.wasm.queryContractSmart(lotteryAddr, {
-        get_draw: { id: drawId }
-      });
-    },
-    [queryClient]
-  );
-
-  const checkDrawWinner = useCallback(
-    async (drawId: number) => {
-      return await cosmWasmClient?.queryContractSmart(lotteryAddr, {
-        check_winner: { addr: address, draw_id: drawId }
-      });
-    },
-    [cosmWasmClient, address]
-  );
-
-  const getDrawUserTickets = useCallback(
-    async (drawId: number) => {
-      return await queryClient?.wasm.queryContractSmart(lotteryAddr, {
-        get_tickets: { addr: address, draw_id: drawId }
-      });
-    },
-    [queryClient, address]
-  );
-
-  const buyTickets = useCallback(
-    async (drawId: number, ticketPrice: Coin, tickets: string[]) => {
-      const amount = Math.ceil(tickets.length * Number(ticketPrice.amount));
-      return await cosmWasmClient?.execute(address as string, lotteryAddr, { buy_tickets: { draw_id: drawId, tickets } }, 'auto', undefined, [
-        coin(amount, ticketPrice.denom)
-      ]);
-    },
-    [cosmWasmClient]
-  );
-
-  const claimPrize = useCallback(
-    async (drawId: number) => {
-      return await cosmWasmClient?.execute(
-        address as string,
-        lotteryAddr,
-        {
-          claim_prize: { draw_id: drawId }
-        },
-        'auto'
-      );
-    },
-    [cosmWasmClient]
-  );
-
-  useEffect(() => {
-    if (!signer || !address) return;
-    const loadClient = async () => {
-      if (!chainInfo) return;
-      const client = await SigningCosmWasmClient.connectWithSigner(chainInfo.rpcUrl, signer, {
-        prefix: chainInfo.bech32Prefix,
-        gasPrice: GasPrice.fromString(chainInfo.defaultGasPrice + chainInfo.feeToken)
-      });
-      setCosmWasmClient(client);
-    };
-    loadClient();
-  }, [signer, address]);
-
-  useEffect(() => {
-    refreshBalance();
-  }, [cosmWasmClient]);
-
-  useEffect(() => {
-    const loadQueryClient = async () => {
-      const httpClient = new HttpBatchClient(chainInfo.rpcUrl, { batchSizeLimit: 10 });
-      const queryClient = QueryClient.withExtensions(await Tendermint34Client.create(httpClient), setupWasmExtension);
-      setQueryClient(queryClient);
-    };
-
-    loadQueryClient();
-  }, [chainInfo]);
+  const connectWallet = useCallback(async () => {
+    const [KeplrWallet] = keplrWallets;
+    const [vectisWallet] = VectisWallets;
+    if ((window as any).vectis.version) {
+      await connect(vectisWallet.walletName);
+    } else {
+      await connect(KeplrWallet.walletName);
+    }
+  }, [connect]);
 
   return (
     <CosmWasmContext.Provider
       value={
         {
-          cosmWasmClient,
-          queryClient,
-          getCurrentDraw,
-          getDrawInfo,
-          checkDrawWinner,
-          getDrawUserTickets,
-          buyTickets,
-          claimPrize,
-          getLastDraws,
-          getConfig,
+          queryService,
           refreshBalance,
-          balance
+          balance,
+          denom,
+          address,
+          chainName: chain.pretty_name,
+          executeService,
+          connectWallet,
+          disconnectWallet: disconnect
         } as CosmWasmState
       }
     >

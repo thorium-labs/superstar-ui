@@ -3,12 +3,13 @@ import { Config } from '../../../interfaces/lottery.interface';
 import { useCosmWasm } from '../../../providers/CosmWasmProvider';
 
 const HowToPlay: React.FC = () => {
-  const { getConfig } = useCosmWasm();
+  const { queryService } = useCosmWasm();
   const [config, setConfig] = React.useState<Config>();
 
   useEffect(() => {
-    getConfig().then(setConfig);
-  }, [getConfig]);
+    if (!queryService) return;
+    queryService.getConfig().then(setConfig);
+  }, [queryService]);
 
   return (
     <div className=" flex items-center justify-center flex-col gap-4">

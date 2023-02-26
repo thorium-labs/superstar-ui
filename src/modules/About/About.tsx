@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Spinner } from '../../components/Spinner';
-import { useWallet } from '../../providers/WalletProvider';
+import { useCosmWasm } from '../../providers/CosmWasmProvider';
 import { getStatistics } from '../../services/indexer';
 import { amountToNormal } from '../../utils/calculateCoin';
 
@@ -12,7 +12,7 @@ type Statistics = {
 };
 
 const About: React.FC = () => {
-  const { chainInfo } = useWallet();
+  const { denom } = useCosmWasm();
   const [statistics, setStatistics] = useState<Statistics | null>(null);
 
   useEffect(() => {
@@ -37,7 +37,7 @@ const About: React.FC = () => {
           <div>
             <p className="text-stone-400 mt-6">
               <span className="text-ss-orange-500">Super</span>
-              <span className="text-orange-500">Star</span> is one of the first of kind dexcentralized lottery based on the Cosmos Blockchain.
+              <span className="text-orange-500">Star</span> is one of the first of kind descentralized lottery based on the Cosmos Blockchain.
               The SuperStar system is transparent, fair, and free of any one central body waiting to be unleashed.
             </p>
           </div>
@@ -98,7 +98,7 @@ const About: React.FC = () => {
             </div>
             <div className="flex flex-col items-center justify-center">
               <h3 className="text-4xl">
-                {amountToNormal(statistics.totalPrizes)} {chainInfo.feeToken.slice(1)}
+                {amountToNormal(statistics.totalPrizes)} {denom.slice(1)}
               </h3>
               <p className="uppercase font-extrabold text-sm">Payouts to winners</p>
             </div>

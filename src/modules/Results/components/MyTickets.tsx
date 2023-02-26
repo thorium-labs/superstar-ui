@@ -6,7 +6,6 @@ import StarsButton from '../../../components/Buttons/StarsButton';
 import { GoBack, GoForward, GoTotallyBack, GoTotallyForward } from '../../../components/Icons';
 import { Draw, TicketResult } from '../../../interfaces/lottery.interface';
 import { useCosmWasm } from '../../../providers/CosmWasmProvider';
-import { useWallet } from '../../../providers/WalletProvider';
 import { amountToNormal } from '../../../utils/calculateCoin';
 import SmallTicketContainer from './SmallTicketContainer';
 import { getClaimedPrize } from '../../../services/indexer';
@@ -18,8 +17,7 @@ import ReactSlidy from 'react-slidy';
 import 'react-slidy/lib/styles.css';
 
 const MyTickets: React.FC = () => {
-  const { getCurrentDraw, getDrawInfo, checkDrawWinner, claimPrize, refreshBalance } = useCosmWasm();
-  const { connectWallet, address } = useWallet();
+  const { queryService, executeService, refreshBalance, connectWallet, address } = useCosmWasm();
   const [currentDraw, setCurrentDraw] = useState<Draw>();
   const [currentUserTicket, setCurrentUserTicket] = useState<TicketResult[]>();
   const [drawInfo, setDrawInfo] = useState<Draw>();
@@ -29,16 +27,16 @@ const MyTickets: React.FC = () => {
   const { toast } = useToast();
 
   useEffect(() => {
-    if (!address) return;
+    if (!address || !queryService) return;
     const loadCurrentDraw = async () => {
-      const draw = await getCurrentDraw();
+      const draw = await queryService.getCurrentDraw();
       if (!draw) return;
       await fetchInfo(draw.id - 1);
       setCurrentDraw(draw);
-      setCurrentUserTicket(await checkDrawWinner(draw.id));
+      setCurrentUserTicket(await queryService.checkDrawWinner(draw.id, address));
     };
     loadCurrentDraw();
-  }, [getCurrentDraw, checkDrawWinner]);
+  }, [queryService]);
 
   const goBack = async () => {
     if (!drawInfo?.id || drawInfo.id === 1) return;
@@ -64,15 +62,15 @@ const MyTickets: React.FC = () => {
     async (drawId: number) => {
       const claimedPrize = await getClaimedPrize(String(drawId), address as string);
       setIsClaimed(!!claimedPrize);
-      setDrawUserTicket(await checkDrawWinner(drawId));
-      setDrawInfo(await getDrawInfo(drawId));
+      setDrawUserTicket(await queryService.checkDrawWinner(drawId, address as string));
+      setDrawInfo(await queryService.getDrawInfo(drawId));
     },
-    [setIsClaimed, setDrawUserTicket, setDrawInfo, checkDrawWinner, getDrawInfo]
+    [setIsClaimed, setDrawUserTicket, setDrawInfo, queryService]
   );
 
   const claim = useCallback(async () => {
-    if (!drawInfo?.id) return;
-    await toast.transaction(claimPrize(drawInfo.id));
+    if (!drawInfo?.id || !executeService) return;
+    await toast.transaction(executeService.claimPrize(drawInfo.id));
     await refreshBalance();
     setIsClaimed(true);
   }, [drawInfo]);

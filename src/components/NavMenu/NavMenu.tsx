@@ -2,7 +2,6 @@ import clsx from 'clsx';
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useCosmWasm } from '../../providers/CosmWasmProvider';
-import { useWallet } from '../../providers/WalletProvider';
 import { amountToNormal } from '../../utils/calculateCoin';
 import { GradientButton } from '../Buttons';
 import { ArrowRight, Cross, Logo } from '../Icons';
@@ -14,7 +13,7 @@ import './NavMenu.css';
 const NavMenu: React.FC = () => {
   const [menu, setMenu] = useState<'open' | 'close'>('close');
   const [notification, setNotification] = useState<string[]>([]);
-  const { connectWallet, disconnectWallet, address } = useWallet();
+  const { connectWallet, disconnectWallet, address } = useCosmWasm();
   const { balance } = useCosmWasm();
 
   const menuLinks = [

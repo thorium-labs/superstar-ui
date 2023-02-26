@@ -8,16 +8,16 @@ import { Toaster } from 'react-hot-toast';
 
 const App: React.FC = () => {
   return (
-    <AppProvider>
-      <Suspense fallback={<Spinner className="min-w-screen min-h-screen" />}>
+    <Suspense fallback={<Spinner className="min-w-screen min-h-screen" />}>
+      <AppProvider>
         <BrowserRouter>
           <Layout>
             <AppRouter />
             <Toaster />
           </Layout>
         </BrowserRouter>
-      </Suspense>
-    </AppProvider>
+      </AppProvider>
+    </Suspense>
   );
 };
 

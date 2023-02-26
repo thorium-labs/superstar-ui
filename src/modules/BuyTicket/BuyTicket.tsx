@@ -3,7 +3,6 @@ import { GradientButton } from '../../components/Buttons';
 import { SimpleCounter } from '../../components/Counters';
 import { Draw } from '../../interfaces/lottery.interface';
 import { useCosmWasm } from '../../providers/CosmWasmProvider';
-import { useWallet } from '../../providers/WalletProvider';
 import { amountToNormal } from '../../utils/calculateCoin';
 import BuyTicketContainer from './components/BuyTicketContainer';
 import DrawContainer from './components/DrawContainer';
@@ -16,10 +15,9 @@ const BuyTicket: React.FC = () => {
   const [ticketAmount, setTicketAmount] = useState<number>(1);
   const [tickets, setTickets] = useState<string[]>([generateRandomTicket()]);
   const [draw, setDraw] = useState<Draw>();
-  const { address } = useWallet();
   const navigate = useNavigate();
   const { toast, isLoading } = useToast();
-  const { getCurrentDraw, buyTickets, balance, refreshBalance } = useCosmWasm();
+  const { queryService, executeService, balance, refreshBalance, address } = useCosmWasm();
 
   const addTicket = (newTicketAmount: number) => {
     setTicketAmount(newTicketAmount);
@@ -38,14 +36,15 @@ const BuyTicket: React.FC = () => {
 
   const handlerBuyTickets = async () => {
     if (!draw) return;
-    await toast.transaction(buyTickets(draw.id, draw.ticket_price, tickets));
+    await toast.transaction(executeService.buyTickets(draw.id, draw.ticket_price, tickets));
     await refreshBalance();
     navigate('/results?tickets');
   };
 
   useEffect(() => {
-    getCurrentDraw().then(setDraw);
-  }, [getCurrentDraw]);
+    if (!queryService) return;
+    queryService.getCurrentDraw().then(setDraw);
+  }, [queryService]);
 
   return (
     <div className="flex gap-4 flex-wrap relative">
@@ -105,7 +104,7 @@ const BuyTicket: React.FC = () => {
             </p>
           </div>
           <GradientButton onClick={handlerBuyTickets} disabled={!address || draw?.status === 'pending' || isLoading}>
-            Buy Ticket {ticketAmount > 1 ? `s` : ''}
+            Buy Ticket{ticketAmount > 1 ? `s` : ''}
           </GradientButton>
         </div>
         <img src="assets/orange-ball.png" className="bubble animate-floating h-[6rem] w-[6rem] absolute top-[-4rem] right-[4rem]" />

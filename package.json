@@ -12,7 +12,12 @@
     "@cosmjs/cosmwasm-stargate": "^0.29.4",
     "@cosmjs/proto-signing": "^0.29.4",
     "@cosmjs/tendermint-rpc": "^0.29.4",
+    "@cosmos-kit/keplr-extension": "^0.32.33",
+    "@cosmos-kit/react": "^1.1.3",
+    "@cosmos-kit/vectis": "^0.14.33",
     "@keplr-wallet/types": "^0.11.17",
+    "buffer": "^6.0.3",
+    "chain-registry": "^1.8.0",
     "clsx": "^1.2.1",
     "date-fns": "^2.29.3",
     "framer-motion": "^7.6.18",
@@ -23,9 +28,11 @@
     "react-router-dom": "^6.4.3",
     "react-slidy": "^4.3.3",
     "react-use": "^17.4.0",
-    "tailwind-scrollbar": "^2.0.1"
+    "tailwind-scrollbar": "^2.0.1",
+    "vite-plugin-node-stdlib-browser": "^0.1.1"
   },
   "devDependencies": {
+    "@chain-registry/types": "^0.14.0",
     "@types/react": "^18.0.24",
     "@types/react-dom": "^18.0.8",
     "@vitejs/plugin-react": "^2.2.0",

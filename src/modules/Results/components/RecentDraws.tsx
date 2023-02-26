@@ -15,39 +15,40 @@ const BlackBall: React.FC<{ num: number }> = ({ num }) => {
 };
 
 const RecentDraws: React.FC = () => {
-  const { getCurrentDraw, getDrawInfo } = useCosmWasm();
+  const { queryService } = useCosmWasm();
   const [currentDraw, setCurrentDraw] = useState<Draw>();
   const [drawInfo, setDrawInfo] = useState<Draw>();
 
   useEffect(() => {
     const loadCurrentDraw = async () => {
-      const draw = await getCurrentDraw();
+      if (!queryService) return;
+      const draw = await queryService.getCurrentDraw();
       setCurrentDraw(draw);
-      setDrawInfo(await getDrawInfo(draw?.id - 1));
+      setDrawInfo(await queryService.getDrawInfo(draw?.id - 1));
     };
     loadCurrentDraw();
-  }, [getCurrentDraw]);
+  }, [queryService]);
 
   const goBack = async () => {
     if (!drawInfo?.id) return;
     if (drawInfo.id === 1) return;
-    setDrawInfo(await getDrawInfo(drawInfo?.id - 1));
+    setDrawInfo(await queryService.getDrawInfo(drawInfo?.id - 1));
   };
 
   const goNext = async () => {
     if (!drawInfo?.id || !currentDraw?.id) return;
     if (drawInfo.id === currentDraw?.id - 1) return;
-    setDrawInfo(await getDrawInfo(drawInfo?.id + 1));
+    setDrawInfo(await queryService.getDrawInfo(drawInfo?.id + 1));
   };
 
   const goFirst = async () => {
     if (!drawInfo?.id) return;
-    setDrawInfo(await getDrawInfo(1));
+    setDrawInfo(await queryService.getDrawInfo(1));
   };
 
   const goLast = async () => {
     if (!drawInfo?.id || !currentDraw?.id) return;
-    setDrawInfo(await getDrawInfo(currentDraw?.id - 1));
+    setDrawInfo(await queryService.getDrawInfo(currentDraw?.id - 1));
   };
 
   return (
