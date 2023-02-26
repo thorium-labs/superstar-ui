@@ -18,7 +18,7 @@ const BuyTicket: React.FC = () => {
   const [draw, setDraw] = useState<Draw>();
   const { address } = useWallet();
   const navigate = useNavigate();
-  const { toast } = useToast();
+  const { toast, isLoading } = useToast();
   const { getCurrentDraw, buyTickets, balance, refreshBalance } = useCosmWasm();
 
   const addTicket = (newTicketAmount: number) => {
@@ -104,8 +104,8 @@ const BuyTicket: React.FC = () => {
               <span className="text-ss-orange-500">{balance?.denom.slice(1)}</span>
             </p>
           </div>
-          <GradientButton onClick={handlerBuyTickets} disabled={!address || draw?.status === 'pending'}>
-            Pay now
+          <GradientButton onClick={handlerBuyTickets} disabled={!address || draw?.status === 'pending' || isLoading}>
+            Buy Ticket {ticketAmount > 1 ? `s` : ''}
           </GradientButton>
         </div>
         <img src="assets/orange-ball.png" className="bubble animate-floating h-[6rem] w-[6rem] absolute top-[-4rem] right-[4rem]" />

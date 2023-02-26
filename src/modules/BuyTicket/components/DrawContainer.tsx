@@ -21,9 +21,9 @@ const DrawContainer: React.FC<{ draw: Draw }> = ({ draw }) => {
           <p className="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-ss-orange-500/80 to-orange-500/80">
             Draw #{draw?.id}
           </p>
-          {draw?.status === 'pending' ? (
+          {timeLeft.hours === 0 && timeLeft.minutes === 0 && timeLeft.seconds === 0 ? (
             <div className="col-span-3 flex justify-center items-center min-h-[4.25rem] text-lg gap-2 font-semibold min-w-[12.6rem]">
-              Pending... <img className="animate-spin-slow h-[2.5rem] w-[2.5rem]" src="/assets/coin-front.png" />
+              <img className="animate-spin-slow h-[2.5rem] w-[2.5rem]" src="/assets/coin-front.png" />
             </div>
           ) : (
             <div className="grid grid-cols-3">
