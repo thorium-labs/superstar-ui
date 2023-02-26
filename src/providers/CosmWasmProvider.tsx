@@ -49,15 +49,15 @@ const CosmWasmProvider: React.FC<PropsWithChildren<{}>> = ({ children }) => {
     setBalance(balance);
   }, [address, queryService, denom]);
 
-  const connectWallet = useCallback(async () => {
+  const connectWallet = async () => {
     const [KeplrWallet] = keplrWallets;
     const [vectisWallet] = VectisWallets;
-    if ((window as any).vectis.version) {
+    if ((window as any).vectis?.version) {
       await connect(vectisWallet.walletName);
     } else {
       await connect(KeplrWallet.walletName);
     }
-  }, [connect]);
+  };
 
   return (
     <CosmWasmContext.Provider

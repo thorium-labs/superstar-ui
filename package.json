@@ -15,8 +15,6 @@
     "@cosmos-kit/keplr-extension": "^0.32.33",
     "@cosmos-kit/react": "^1.1.3",
     "@cosmos-kit/vectis": "^0.14.33",
-    "@keplr-wallet/types": "^0.11.17",
-    "buffer": "^6.0.3",
     "chain-registry": "^1.8.0",
     "clsx": "^1.2.1",
     "date-fns": "^2.29.3",
@@ -28,18 +26,20 @@
     "react-router-dom": "^6.4.3",
     "react-slidy": "^4.3.3",
     "react-use": "^17.4.0",
-    "tailwind-scrollbar": "^2.0.1",
-    "vite-plugin-node-stdlib-browser": "^0.1.1"
+    "tailwind-scrollbar": "^2.0.1"
   },
   "devDependencies": {
     "@chain-registry/types": "^0.14.0",
+    "@keplr-wallet/types": "^0.11.44",
     "@types/react": "^18.0.24",
     "@types/react-dom": "^18.0.8",
     "@vitejs/plugin-react": "^2.2.0",
     "autoprefixer": "^10.4.13",
     "postcss": "^8.4.19",
+    "rollup-plugin-polyfill-node": "^0.12.0",
     "tailwindcss": "^3.2.4",
     "typescript": "^4.6.4",
-    "vite": "^3.2.3"
+    "vite": "^3.2.3",
+    "vite-plugin-node-stdlib-browser": "^0.1.1"
   }
 }
