@@ -40,7 +40,7 @@ const DrawPresent: React.FC<Props> = ({ draw }) => {
           </div>
           {draw?.status === 'pending' ? (
             <div className="col-span-3 flex justify-center items-center min-h-[4.25rem] text-lg gap-2 font-semibold">
-              Pending... <img className="animate-spin-slow h-[2.5rem] w-[2.5rem]" src="/assets/coin-front.png" />
+              <img className="animate-spin-slow h-[2.5rem] w-[2.5rem]" src="/assets/coin-front.png" />
             </div>
           ) : (
             <>

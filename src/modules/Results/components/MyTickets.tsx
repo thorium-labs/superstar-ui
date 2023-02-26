@@ -75,7 +75,7 @@ const MyTickets: React.FC = () => {
     await toast.transaction(claimPrize(drawInfo.id));
     await refreshBalance();
     setIsClaimed(true);
-  }, []);
+  }, [drawInfo]);
 
   const prizePerTicket = useMemo(
     () => drawInfo?.prize_per_match?.map((prize, i) => Math.round(Number(prize) / (drawInfo.winners_per_match?.[i] || 1))),

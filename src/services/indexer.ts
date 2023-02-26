@@ -40,6 +40,17 @@ const queryClaimedPrize = gql`
   }
 `;
 
+const queryStatistics = gql`
+  query {
+    statistic(id: "global") {
+      numberOfDraws
+      numberOfTickets
+      numberOfWinners
+      totalPrizes
+    }
+  }
+`;
+
 export const getRecentPurchases = async (limit: number) => {
   const data = await request(INDEXER_URL, queryRecentPurchases, {
     limit
@@ -60,4 +71,9 @@ export const getClaimedPrize = async (drawId: string, winner: string) => {
     winner
   });
   return data.prizes.nodes[0];
+};
+
+export const getStatistics = async () => {
+  const { statistic } = await request(INDEXER_URL, queryStatistics);
+  return statistic;
 };

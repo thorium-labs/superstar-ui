@@ -1,8 +1,23 @@
-import React from "react";
-import { useWallet } from "../../providers/WalletProvider";
+import React, { useEffect, useState } from 'react';
+import { Spinner } from '../../components/Spinner';
+import { useWallet } from '../../providers/WalletProvider';
+import { getStatistics } from '../../services/indexer';
+import { amountToNormal } from '../../utils/calculateCoin';
+
+type Statistics = {
+  numberOfDraws: number;
+  numberOfTickets: number;
+  numberOfWinners: number;
+  totalPrize: number;
+};
 
 const About: React.FC = () => {
   const { chainInfo } = useWallet();
+  const [statistics, setStatistics] = useState<Statistics | null>(null);
+
+  useEffect(() => {
+    getStatistics().then(setStatistics);
+  }, []);
 
   return (
     <div className="relative">
@@ -75,20 +90,26 @@ const About: React.FC = () => {
             <span className="text-orange-500">Star</span>
           </p> */}
         </div>
-        <div className="absolute text-stone-100/80 bottom-[-4rem] bg-gradient-to-tr from-ss-orange-500 to-orange-500 flex gap-12 px-12 py-8 rounded-lg left-0 right-0 mx-auto max-w-fit">
-          <div className="flex flex-col items-center justify-center">
-            <h3 className="text-4xl">0</h3>
-            <p className="uppercase font-extrabold text-sm">winners</p>
+        {statistics ? (
+          <div className="absolute text-stone-100/80 bottom-[-4rem] bg-gradient-to-tr from-ss-orange-500 to-orange-500 flex gap-12 px-12 py-8 rounded-lg left-0 right-0 mx-auto max-w-fit">
+            <div className="flex flex-col items-center justify-center">
+              <h3 className="text-4xl">{statistics.numberOfWinners}</h3>
+              <p className="uppercase font-extrabold text-sm">winners</p>
+            </div>
+            <div className="flex flex-col items-center justify-center">
+              <h3 className="text-4xl">
+                {amountToNormal(statistics.totalPrize)} {chainInfo.feeToken.slice(1)}
+              </h3>
+              <p className="uppercase font-extrabold text-sm">Payouts to winners</p>
+            </div>
+            <div className="flex flex-col items-center justify-center">
+              <h3 className="text-4xl">{statistics.numberOfTickets}</h3>
+              <p className="uppercase font-extrabold text-sm">Tickets sold</p>
+            </div>
           </div>
-          <div className="flex flex-col items-center justify-center">
-            <h3 className="text-4xl">0 {chainInfo.feeToken.slice(1)}</h3>
-            <p className="uppercase font-extrabold text-sm">Payouts to winners</p>
-          </div>
-          <div className="flex flex-col items-center justify-center">
-            <h3 className="text-4xl">0</h3>
-            <p className="uppercase font-extrabold text-sm">Tickets sold</p>
-          </div>
-        </div>
+        ) : (
+          <Spinner />
+        )}
       </div>
     </div>
   );

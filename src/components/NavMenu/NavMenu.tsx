@@ -21,25 +21,21 @@ const NavMenu: React.FC = () => {
     {
       link: '/',
       text: 'Home',
-      sum: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has',
       src: '/assets/home.png'
     },
     {
       link: '/ticket',
       text: 'Buy Tickets',
-      sum: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has',
       src: '/assets/tickets.png'
     },
     {
       link: '/results',
       text: 'Results',
-      sum: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has',
       src: '/assets/results.png'
     },
     {
       link: '/about',
       text: 'About',
-      sum: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has',
       src: '/assets/about.png'
     }
   ];
@@ -92,7 +88,7 @@ const NavMenu: React.FC = () => {
           >
             <Cross className="h-[24px] w-[24px] hover:fill-orange-500" />
           </button>
-          {menuLinks.map(({ link, text, sum, src }, i) => {
+          {menuLinks.map(({ link, text, src }, i) => {
             return (
               <React.Fragment key={`menu-${i}`}>
                 <li className="nav-li relative flex-1 transition-all duration-300" onClick={() => setMenu('close')}>
@@ -100,9 +96,9 @@ const NavMenu: React.FC = () => {
                     to={link}
                     className="nav-link flex items-start justify-center flex-col px-4 gap-2 h-full transition-all duration-300 hover:bg-gradient-to-b from-transparent via-transparent to-stone-500/70"
                   >
-                    <img className="nav-link-img opacity-0 transition-all w-[4rem] duration-300" alt={link} src={src} />
+                    <img className="nav-link-img transition-all w-[4rem] duration-300" alt={link} src={src} />
                     <p className="nav-link-text text-3xl font-bold transition-all duration-300">{text}</p>
-                    <p className="nav-link-sum text-sm text-stone-400 transition-all duration-300">{sum}</p>
+                    <p className="nav-link-sum text-sm text-stone-400 transition-all duration-300">{}</p>
                     <button className="nav-link-button border border-stone-600 p-2 rounded-full transition-all duration-300">
                       <ArrowRight className="fill-white w-6 h-6" />
                     </button>
