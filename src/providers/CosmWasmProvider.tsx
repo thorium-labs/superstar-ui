@@ -22,8 +22,8 @@ export const CosmWasmContext = React.createContext<CosmWasmState | null>(null);
 const CosmWasmProvider: React.FC<PropsWithChildren<{}>> = ({ children }) => {
   const [executeService, setExecuteService] = useState<SuperStartExecuteService>();
   const [queryService, setQueryService] = useState<SuperStarQueryService>();
-  const [balance, setBalance] = useState<Coin>({ amount: '0', denom: '' });
   const [denom, setDenom] = useState<string>('');
+  const [balance, setBalance] = useState<Coin>({ amount: '0', denom });
   const { connect, address, chain, getOfflineSignerAmino, disconnect } = useChain(import.meta.env.VITE_CHAIN_NAME);
 
   useEffect(() => {
