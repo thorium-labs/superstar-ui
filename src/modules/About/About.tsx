@@ -8,7 +8,7 @@ type Statistics = {
   numberOfDraws: number;
   numberOfTickets: number;
   numberOfWinners: number;
-  totalPrize: number;
+  totalPrizes: number;
 };
 
 const About: React.FC = () => {
@@ -98,7 +98,7 @@ const About: React.FC = () => {
             </div>
             <div className="flex flex-col items-center justify-center">
               <h3 className="text-4xl">
-                {amountToNormal(statistics.totalPrize)} {chainInfo.feeToken.slice(1)}
+                {amountToNormal(statistics.totalPrizes)} {chainInfo.feeToken.slice(1)}
               </h3>
               <p className="uppercase font-extrabold text-sm">Payouts to winners</p>
             </div>
