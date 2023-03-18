@@ -1,6 +1,7 @@
-import React from "react";
-import { Draw } from "../../../interfaces/lottery.interface";
-import { amountToNormal } from "../../../utils/calculateCoin";
+import React from 'react';
+import { Draw } from '../../../interfaces/lottery.interface';
+import { amountToNormal } from '../../../utils/calculateCoin';
+import { format } from 'date-fns';
 
 const BlackBall: React.FC<{ num: number }> = ({ num }) => {
   return (
@@ -28,7 +29,9 @@ const RecentDrawsCard: React.FC<Props> = ({ draw }) => {
           <img src="assets/coin-5.png" className="h-[1.5rem] absolute top-[-1rem] left-[1.5rem] rotate-360" />
           <p className="draw-number text-lg font-bold text-stone-900 uppercase text-center absolute ">#{draw.id}</p>
         </div>
-        <p className="text-sm font-bold text-stone-900 uppercase p-2 text-center">Dec 19, 2022</p>
+        <p className="text-sm font-bold text-stone-900 uppercase p-2 text-center">
+          {format(new Date(+(draw.end_time as { at_time: string }).at_time / 1e6), 'HH:m LLL d')}
+        </p>
       </div>
       <div className="flex flex-col justify-end pb-4 self-end w-[70%] items-center font-bold">
         <h4 className="text-4xl">{amountToNormal(draw.total_prize.amount)}</h4>
@@ -36,7 +39,7 @@ const RecentDrawsCard: React.FC<Props> = ({ draw }) => {
       </div>
       <div className="flex w-full items-center justify-center">
         {[...(draw.winner_number as string)].map((num, i) => (
-          <BlackBall key={draw.id + "_number_" + i} num={parseInt(num)} />
+          <BlackBall key={draw.id + '_number_' + i} num={parseInt(num)} />
         ))}
       </div>
       <div className="w-full min-h-[rem] relative">

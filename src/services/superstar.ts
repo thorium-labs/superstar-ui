@@ -13,7 +13,6 @@ import {
   TxExtension
 } from '@cosmjs/stargate';
 import { HttpBatchClient, Tendermint34Client } from '@cosmjs/tendermint-rpc';
-import type { Chain } from '@chain-registry/types';
 
 const lotteryAddr = import.meta.env.VITE_CONTRACT_ADDR;
 
@@ -38,7 +37,7 @@ export class SuperStarQueryService {
     return await Tendermint34Client.create(httpClient);
   }
 
-  static async connect(chain: Chain): Promise<SuperStarQueryService> {
+  static async connect(chain: { chain_name: string }): Promise<SuperStarQueryService> {
     const tmClient = await this.getTmClient(chain.chain_name);
     return new SuperStarQueryService(tmClient);
   }
@@ -99,7 +98,7 @@ export class SuperStartExecuteService extends SuperStarQueryService {
   constructor(readonly tmClient: Tendermint34Client, readonly signingClient: SigningCosmWasmClient, readonly userAddr: string) {
     super(tmClient);
   }
-  static async connectWithSigner(signer: OfflineSigner, chain: Chain): Promise<SuperStartExecuteService> {
+  static async connectWithSigner(signer: OfflineSigner, chain: any): Promise<SuperStartExecuteService> {
     const rpcUrl = chain.chain_name.includes('testnet')
       ? `https://rpc.testcosmos.directory/${chain.chain_name}`
       : `https://rpc.cosmos.directory/${chain.chain_name}`;

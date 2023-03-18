@@ -1,9 +1,7 @@
 import React, { PropsWithChildren, useCallback, useEffect, useState } from 'react';
 import { SuperStarQueryService, SuperStartExecuteService } from '../services/superstar';
 import { Coin } from '@cosmjs/proto-signing';
-import { useChain } from '@cosmos-kit/react';
-import { wallets as keplrWallets } from '@cosmos-kit/keplr-extension';
-import { wallets as VectisWallets } from '@cosmos-kit/vectis';
+import { useChain } from '@cosmos-kit/react-lite';
 
 interface CosmWasmState {
   executeService: SuperStartExecuteService;
@@ -24,7 +22,7 @@ const CosmWasmProvider: React.FC<PropsWithChildren<{}>> = ({ children }) => {
   const [queryService, setQueryService] = useState<SuperStarQueryService>();
   const [denom, setDenom] = useState<string>('');
   const [balance, setBalance] = useState<Coin>({ amount: '0', denom });
-  const { connect, address, chain, getOfflineSignerAmino, disconnect } = useChain(import.meta.env.VITE_CHAIN_NAME);
+  const { connect, address, chain, getOfflineSignerAmino, disconnect } = useChain('junotestnet');
 
   useEffect(() => {
     SuperStarQueryService.connect(chain).then(setQueryService);
@@ -35,7 +33,7 @@ const CosmWasmProvider: React.FC<PropsWithChildren<{}>> = ({ children }) => {
   useEffect(() => {
     const loadExecuteService = async () => {
       if (!queryService || !address) return;
-      const signer = await getOfflineSignerAmino(chain.chain_id);
+      const signer = getOfflineSignerAmino();
       const executeService = await SuperStartExecuteService.connectWithSigner(signer, chain);
       await refreshBalance();
       setExecuteService(executeService);
@@ -49,16 +47,6 @@ const CosmWasmProvider: React.FC<PropsWithChildren<{}>> = ({ children }) => {
     setBalance(balance);
   }, [address, queryService, denom]);
 
-  const connectWallet = async () => {
-    const [KeplrWallet] = keplrWallets;
-    const [vectisWallet] = VectisWallets;
-    if ((window as any).vectis?.version) {
-      await connect(vectisWallet.walletName);
-    } else {
-      await connect(KeplrWallet.walletName);
-    }
-  };
-
   return (
     <CosmWasmContext.Provider
       value={
@@ -70,7 +58,7 @@ const CosmWasmProvider: React.FC<PropsWithChildren<{}>> = ({ children }) => {
           address,
           chainName: chain.pretty_name,
           executeService,
-          connectWallet,
+          connectWallet: connect,
           disconnectWallet: disconnect
         } as CosmWasmState
       }
