@@ -23,7 +23,7 @@ const DrawPresent: React.FC<Props> = ({ draw }) => {
 
   return (
     <div className="relative w-full min-h-[160px] mt-[2rem] mb-[3rem]">
-      <div className="py-4 px-12 rounded-xl bg-stone-700/20 backdrop-blur w-full mx-auto flex gap-4 items-center justify-between min-h-[10rem] absolute z-20">
+      <div className="py-4 lg:px-12 rounded-xl flex-col md:flex-row bg-stone-700/20 backdrop-blur w-full mx-auto flex gap-4 items-center justify-between min-h-[10rem] absolute z-20">
         <div className="min-w-[200px] flex flex-col items-center gap-2">
           <div className="flex items-center justify-center flex-col">
             <p className="text-4xl font-extrabold">{amountToNormal(draw?.total_prize.amount || 0)}</p>

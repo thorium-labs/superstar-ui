@@ -38,14 +38,14 @@ const Home: React.FC = () => {
 
   return (
     <div className="flex flex-col gap-24">
-      <div className="header min-h-[5rem] flex items-center">
-        <div className="pl-32">
+      <div className="header min-h-[20rem] md:min-h-[15rem] flex items-center">
+        <div className="p-4 md:pl-32 flex flex-col gap-4 md:gap-0">
           <h1 className="text-5xl font-semibold ">
             <span>Welcome to </span>
             <span className="text-ss-orange-500">Super</span>
             <span className="text-orange-500">Star</span>
           </h1>
-          <h2 className="text-stone-400 text-end">A decentralized platform lottery on {chainName} blockchain</h2>
+          <h2 className="text-stone-400 md:text-end">A decentralized platform lottery on {chainName} blockchain</h2>
         </div>
       </div>
       <DrawPresent draw={lastDraw} />
