@@ -1,8 +1,7 @@
-import React from "react";
+import clsx from 'clsx';
+import React from 'react';
 
-const Logo: React.FC<React.SVGAttributes<HTMLOrSVGElement>> = ({
-  ...props
-}) => {
+const Logo: React.FC<React.SVGAttributes<HTMLOrSVGElement>> = ({ className, ...props }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -10,28 +9,15 @@ const Logo: React.FC<React.SVGAttributes<HTMLOrSVGElement>> = ({
       viewBox="0 0 115.95 105.38"
       height="100%"
       width="100%"
+      className={clsx('h-[1.5rem] w-[1.8rem] md:h-[2.5rem] md:w-[3.125rem]', className)}
       {...props}
     >
       <defs>
-        <linearGradient
-          id="linear-gradient"
-          x1="-50.58"
-          x2="43.81"
-          y1="120.62"
-          y2="66.12"
-          gradientUnits="userSpaceOnUse"
-        >
+        <linearGradient id="linear-gradient" x1="-50.58" x2="43.81" y1="120.62" y2="66.12" gradientUnits="userSpaceOnUse">
           <stop offset="0.72" stopColor="#f97316"></stop>
           <stop offset="1" stopColor="#faaf3b"></stop>
         </linearGradient>
-        <linearGradient
-          id="linear-gradient-2"
-          x1="44.83"
-          x2="141.7"
-          y1="55.29"
-          y2="-0.64"
-          gradientUnits="userSpaceOnUse"
-        >
+        <linearGradient id="linear-gradient-2" x1="44.83" x2="141.7" y1="55.29" y2="-0.64" gradientUnits="userSpaceOnUse">
           <stop offset="0" stopColor="#f97316"></stop>
           <stop offset="0.6" stopColor="#faaf3b"></stop>
         </linearGradient>
