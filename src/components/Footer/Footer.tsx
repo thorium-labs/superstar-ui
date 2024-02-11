@@ -9,7 +9,7 @@ const Footer: React.FC = () => {
     }
   ];
   return (
-    <footer className="min-h-8 py-4 px-12 flex items-center justify-between w-full bg-transparent z-40 backdrop-blur mt-8">
+    <footer className="min-h-8 py-8 md:py-4 px-4 md:px-12 flex items-center justify-between w-full bg-transparent z-40 backdrop-blur mt-8">
       <div className="max-w-6xl flex mx-auto justify-between w-full">
         <p className="text-stone-500">Thorium labs - {new Date().getFullYear()} All Rights Reserved</p>
         <div className="flex gap-4">

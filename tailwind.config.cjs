@@ -15,6 +15,13 @@ module.exports = {
         'ss-orange-900': '#773B0B',
         'ss-bg': '#1c1917'
       },
+      gridTemplateColumns: {
+        "auto-150": "repeat(auto-fill,minmax(150px,1fr))",
+        "auto-180": "repeat(auto-fill,minmax(180px,1fr))",
+        "auto-200": "repeat(auto-fill,minmax(200px,1fr))",
+        "auto-250": "repeat(auto-fill,minmax(250px,1fr))",
+        "auto-300": "repeat(auto-fill,minmax(300px,1fr))",
+      },
       keyframes: {
         floating: {
           '0%, 100%': { transform: 'translatey(0px)' },

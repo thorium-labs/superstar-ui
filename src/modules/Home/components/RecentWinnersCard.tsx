@@ -1,7 +1,8 @@
-import React from "react";
-import { Winner } from "../../../interfaces/indexer.interface";
-import { amountToNormal } from "../../../utils/calculateCoin";
-import { IntlAddress } from "../../../utils/intl";
+import React from 'react';
+import { Winner } from '../../../interfaces/indexer.interface';
+import { amountToNormal } from '../../../utils/calculateCoin';
+import { IntlAddress } from '../../../utils/intl';
+import useMediaQuery from '../../../hooks/useMediaQuery';
 
 interface Props {
   winner: Winner;
@@ -10,6 +11,7 @@ interface Props {
 const RecentWinnersCard: React.FC<Props> = ({ winner }) => {
   const [amount] = winner.prize.match(/\d*/g) as string[];
   const [denom] = winner.prize.match(/\D*/g) as string[];
+  const isMd = useMediaQuery('md');
   return (
     <div className="bg-stone-700/60 rounded-lg flex flex-col p-4 gap-2 relative mt-[2rem] min-h-[100px]">
       <div className="absolute right-[1rem] top-[-2rem]">
@@ -21,7 +23,7 @@ const RecentWinnersCard: React.FC<Props> = ({ winner }) => {
       <p className="text-transparent bg-clip-text bg-gradient-to-r from-ss-orange-500/80 to-orange-500/80 text-2xl font-semibold">
         {amountToNormal(amount)} {denom}
       </p>
-      <p className="text-sm">{IntlAddress(winner.winner)}</p>
+      <p className="text-sm">{IntlAddress(winner.winner, isMd ? 8 : 6)}</p>
     </div>
   );
 };

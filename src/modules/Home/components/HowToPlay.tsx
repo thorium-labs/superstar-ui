@@ -14,9 +14,9 @@ const HowToPlay: React.FC = () => {
   return (
     <div className=" flex items-center justify-center flex-col gap-4">
       <h2 className="col-span-4 text-6xl">How to play?</h2>
-      <p className="text-stone-400 mb-8">The digits on your ticket must match in the correct order to win.</p>
-      <div className="flex-1 w-full flex items-center justify-between ">
-        <div className="flex-1 text-stone-400 max-w-[50%]">
+      <p className="text-stone-400 mb-6">The digits on your ticket must match in the correct order to win.</p>
+      <div className="flex-1 w-full flex items-center justify-between flex-col gap-4 md:flex-row">
+        <div className="flex-1 text-stone-400 md:max-w-[50%]">
           <h4 className="text-3xl mb-2 text-transparent bg-clip-text bg-gradient-to-r from-orange-400/80 to-ss-orange-500/80 font-semibold">
             Prize Funds
           </h4>
@@ -31,7 +31,7 @@ const HowToPlay: React.FC = () => {
           <h5 className="text-xl text-white leading-[2.5rem]">Staking Injections</h5>
           <p>Staking rewards from the treasury is added to lottery draws over the course of a week.</p>
         </div>
-        <div className="w-full grid grid-cols-2 flex-1 gap-4 max-w-[40%] border-[2px] border-stone-400 rounded-lg px-8 py-4">
+        <div className="w-full grid grid-cols-2 flex-1 gap-4 md:max-w-[40%] border-[2px] border-stone-400 rounded-lg px-8 py-4">
           <h5 className="text-white text-center">Draw</h5>
           <h5 className="text-white text-center">Prize per match</h5>
           {config?.percentage_per_match.map((_, index) => (

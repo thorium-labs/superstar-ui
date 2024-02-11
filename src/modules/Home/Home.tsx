@@ -9,9 +9,13 @@ import { Draw } from '../../interfaces/lottery.interface';
 import { getRecentPurchases, getRecentWinners } from '../../services/indexer';
 import { Purchase, Winner } from '../../interfaces/indexer.interface';
 import './Home.css';
+import useMediaQuery from '../../hooks/useMediaQuery';
 
 const Home: React.FC = () => {
   const { queryService, chainName } = useCosmWasm();
+  const isLg = useMediaQuery('lg');
+  const isMd = useMediaQuery('md');
+  const isSm = useMediaQuery('sm');
   const [lastDraw, setLastDraw] = useState<Draw>();
   const [recentDraws, setRecentDraws] = useState<Draw[]>([]);
   const [recentTickets, setRecentTickets] = useState<Purchase[]>([
@@ -99,25 +103,31 @@ const Home: React.FC = () => {
         </div>
       </div>
       <DrawPresent draw={lastDraw} />
-      <div className="grid grid-cols-4 gap-4 gap-x-8">
-        <h2 className="col-span-4 text-3xl">Recent Draws</h2>
-        {recentDraws.map((draw) => (
-          <RecentDrawsCard key={draw.id} draw={draw} />
-        ))}
-      </div>
-      <HowToPlay />
-      <div className="grid grid-cols-2 gap-4">
-        <div className="grid grid-cols-2 gap-4">
-          <h2 className="col-span-2 text-3xl">Recent Winners</h2>
-          {recentWinners.map((winner, i) => (
-            <RecentWinnersCard key={winner.prize + i} winner={winner} />
+      <div className="flex flex-col gap-8">
+        <h2 className="text-3xl">Recent Draws</h2>
+        <div className="grid grid-cols-auto-250 md:[&>*:nth-child(4)]:hidden lg:[&>*:nth-child(4)]:flex gap-6 ">
+          {recentDraws.map((draw) => (
+            <RecentDrawsCard key={draw.id} draw={draw} />
           ))}
         </div>
-        <div className="grid grid-cols-2 gap-4">
-          <h2 className="col-span-2 text-3xl">Recent Purchased Tickets</h2>
-          {recentTickets.map((purchase, i) => (
-            <RecentTicketsPurchased key={purchase.buyer + i} purchase={purchase} />
-          ))}
+      </div>
+      <HowToPlay />
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-14">
+        <div>
+          <h2 className="text-3xl">Recent Winners</h2>
+          <div className="grid grid-cols-2 gap-4">
+            {recentWinners.map((winner, i) => (
+              <RecentWinnersCard key={winner.prize + i} winner={winner} />
+            ))}
+          </div>
+        </div>
+        <div>
+          <h2 className="text-3xl">Recent Purchased Tickets</h2>
+          <div className="grid grid-cols-2 gap-4">
+            {recentTickets.map((purchase, i) => (
+              <RecentTicketsPurchased key={purchase.buyer + i} purchase={purchase} />
+            ))}
+          </div>
         </div>
       </div>
     </div>
