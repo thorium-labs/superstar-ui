@@ -4,7 +4,7 @@ import { useCosmWasm } from '../../providers/CosmWasmProvider';
 import { getStatistics } from '../../services/indexer';
 import { amountToNormal } from '../../utils/calculateCoin';
 
-type Statistics = {
+export type Statistics = {
   numberOfDraws: number;
   numberOfTickets: number;
   numberOfWinners: number;

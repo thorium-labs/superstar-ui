@@ -2,11 +2,9 @@ import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfil
 import react from '@vitejs/plugin-react';
 import notifier from 'vite-plugin-notifier';
 import rollupNodePolyFill from 'rollup-plugin-node-polyfills';
-import { visualizer } from 'rollup-plugin-visualizer';
 
-// https://vitejs.dev/config/
-export default {
-  plugins: [react(), notifier(), visualizer()],
+const config = {
+  plugins: [react(), notifier()],
   server: {
     port: 3000
   },
@@ -31,3 +29,5 @@ export default {
     }
   }
 };
+
+export default config;

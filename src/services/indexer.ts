@@ -1,4 +1,5 @@
 import { request, gql } from 'graphql-request';
+import { Statistics } from '../modules/About/About';
 
 const INDEXER_URL = import.meta.env.VITE_INDEXER_URL;
 
@@ -52,21 +53,21 @@ const queryStatistics = gql`
 `;
 
 export const getRecentPurchases = async (limit: number) => {
-  const data = await request(INDEXER_URL, queryRecentPurchases, {
+  const data = await request<{ purchases: { nodes: unknown } }>(INDEXER_URL, queryRecentPurchases, {
     limit
   });
   return data.purchases.nodes;
 };
 
 export const getRecentWinners = async (limit: number) => {
-  const data = await request(INDEXER_URL, queryRecentWinners, {
+  const data = await request<{ prizes: { nodes: unknown } }>(INDEXER_URL, queryRecentWinners, {
     limit
   });
   return data.prizes.nodes;
 };
 
 export const getClaimedPrize = async (drawId: string, winner: string) => {
-  const data = await request(INDEXER_URL, queryClaimedPrize, {
+  const data = await request<{ prizes: { nodes: unknown[] } }>(INDEXER_URL, queryClaimedPrize, {
     drawId,
     winner
   });
@@ -74,6 +75,6 @@ export const getClaimedPrize = async (drawId: string, winner: string) => {
 };
 
 export const getStatistics = async () => {
-  const { statistic } = await request(INDEXER_URL, queryStatistics);
+  const { statistic } = await request<{ statistic: Statistics }>(INDEXER_URL, queryStatistics);
   return statistic;
 };
