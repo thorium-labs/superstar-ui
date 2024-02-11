@@ -38,7 +38,7 @@ const DrawPresent: React.FC<Props> = ({ draw }) => {
               #{draw?.id}
             </span>
           </div>
-          {timeLeft.hours === 0 && timeLeft.minutes === 0 && timeLeft.seconds === 0 ? (
+          {timeLeft.hours === 0 && timeLeft.minutes === 0 && timeLeft.seconds === 0 && false ? (
             <div className="col-span-3 flex justify-center items-center min-h-[4.25rem] text-lg gap-2 font-semibold">
               <img className="animate-spin-slow h-[2.5rem] w-[2.5rem]" src="/assets/coin-front.png" />
             </div>

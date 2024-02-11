@@ -19,7 +19,7 @@ const ConnectWallet: React.FC = () => {
           </span>
         </button>
       ) : (
-        <GradientButton onClick={connectWallet} className="min-w-[8rem] md:min-w-[9.5rem]">
+        <GradientButton disabled className="min-w-[8rem] md:min-w-[9.5rem]">
           Connect Wallet
         </GradientButton>
       )}

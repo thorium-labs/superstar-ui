@@ -12,15 +12,15 @@ import {
   StakingExtension,
   TxExtension
 } from '@cosmjs/stargate';
-import { HttpBatchClient, Tendermint34Client } from '@cosmjs/tendermint-rpc';
+import { HttpBatchClient, Comet38Client } from '@cosmjs/tendermint-rpc';
 
 const lotteryAddr = import.meta.env.VITE_CONTRACT_ADDR;
 
 export class SuperStarQueryService {
   client: QueryClient & StakingExtension & BankExtension & TxExtension & DistributionExtension & WasmExtension;
-  constructor(readonly tmClient: Tendermint34Client) {
+  constructor(readonly cometClient: Comet38Client) {
     this.client = QueryClient.withExtensions(
-      this.tmClient,
+      this.cometClient,
       setupStakingExtension,
       setupBankExtension,
       setupTxExtension,
@@ -29,17 +29,17 @@ export class SuperStarQueryService {
     );
   }
 
-  static async getTmClient(chainName: string): Promise<Tendermint34Client> {
+  static async getCometClient(chainName: string): Promise<Comet38Client> {
     const rpcUrl = chainName.includes('testnet')
       ? `https://rpc.testcosmos.directory/${chainName}`
       : `https://rpc.cosmos.directory/${chainName}`;
     const httpClient = new HttpBatchClient(rpcUrl, { batchSizeLimit: 10 });
-    return await Tendermint34Client.create(httpClient);
+    return await Comet38Client.create(httpClient);
   }
 
   static async connect(chain: { chain_name: string }): Promise<SuperStarQueryService> {
-    const tmClient = await this.getTmClient(chain.chain_name);
-    return new SuperStarQueryService(tmClient);
+    const cometClient = await this.getCometClient(chain.chain_name);
+    return new SuperStarQueryService(cometClient);
   }
 
   async getBalances(address: string): Promise<Coin[]> {
@@ -95,7 +95,7 @@ export class SuperStarQueryService {
 }
 
 export class SuperStartExecuteService extends SuperStarQueryService {
-  constructor(readonly tmClient: Tendermint34Client, readonly signingClient: SigningCosmWasmClient, readonly userAddr: string) {
+  constructor(readonly tmClient: Comet38Client, readonly signingClient: SigningCosmWasmClient, readonly userAddr: string) {
     super(tmClient);
   }
   static async connectWithSigner(signer: OfflineSigner, chain: any): Promise<SuperStartExecuteService> {
@@ -103,10 +103,9 @@ export class SuperStartExecuteService extends SuperStarQueryService {
       ? `https://rpc.testcosmos.directory/${chain.chain_name}`
       : `https://rpc.cosmos.directory/${chain.chain_name}`;
     const [{ denom, average_gas_price }] = chain.fees?.fee_tokens || [];
-    const tmClient = await this.getTmClient(chain.chain_name);
+    const tmClient = await this.getCometClient(chain.chain_name);
     const [{ address }] = await signer.getAccounts();
     const signingClient = await SigningCosmWasmClient.connectWithSigner(rpcUrl, signer, {
-      prefix: chain.bech32_prefix,
       gasPrice: GasPrice.fromString(`${average_gas_price || 0.025}${denom}`)
     });
     return new SuperStartExecuteService(tmClient, signingClient, address);

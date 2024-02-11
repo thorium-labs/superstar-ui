@@ -1,7 +1,8 @@
 import React, { PropsWithChildren, useCallback, useEffect, useState } from 'react';
 import { SuperStarQueryService, SuperStartExecuteService } from '../services/superstar';
 import { Coin } from '@cosmjs/proto-signing';
-import { useChain } from '@cosmos-kit/react-lite';
+import { useChain, useChainWallet } from '@cosmos-kit/react-lite';
+import { keplrExtensionInfo } from '@cosmos-kit/keplr-extension';
 
 interface CosmWasmState {
   executeService: SuperStartExecuteService;

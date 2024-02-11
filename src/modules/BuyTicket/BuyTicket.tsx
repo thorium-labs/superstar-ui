@@ -103,9 +103,7 @@ const BuyTicket: React.FC = () => {
               <span className="text-ss-orange-500">{balance?.denom.slice(1)}</span>
             </p>
           </div>
-          <GradientButton onClick={handlerBuyTickets} disabled={!address || draw?.status === 'pending' || isLoading}>
-            Buy Ticket{ticketAmount > 1 ? `s` : ''}
-          </GradientButton>
+          <GradientButton disabled={true}>Buy Ticket{ticketAmount > 1 ? `s` : ''}</GradientButton>
         </div>
         <img src="assets/orange-ball.png" className="bubble animate-floating h-[6rem] w-[6rem] absolute top-[-4rem] right-[4rem]" />
         <img src="assets/ss-orange-ball.png" className="bubble h-[4rem] w-[4rem] rounded-full absolute top-[-2rem] right-[1rem] z-20" />

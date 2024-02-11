@@ -1,19 +1,14 @@
-import React, { PropsWithChildren, useMemo } from 'react';
-import { ChainProvider } from '@cosmos-kit/react-lite';
-import { wallets as VectisWallet } from '@cosmos-kit/vectis';
-import { wallets as KeplrWallet } from '@cosmos-kit/keplr-extension';
+import React, { PropsWithChildren } from 'react';
+import { ChainProvider } from '@cosmos-kit/react';
+import { wallets } from '@cosmos-kit/keplr-extension';
 import CosmWasmProvider from './CosmWasmProvider';
 import { chains } from '../utils/chains';
-import ModalWallet from '../components/ModalWallet/ModalWallet';
+
+import '@interchain-ui/react/styles';
 
 const AppProvider: React.FC<PropsWithChildren<{}>> = ({ children }) => {
   return (
-    <ChainProvider
-      wallets={[...VectisWallet, ...KeplrWallet]}
-      assetLists={[]}
-      chains={chains as any}
-      walletModal={(props) => <ModalWallet {...props} />}
-    >
+    <ChainProvider wallets={wallets} assetLists={[]} chains={chains}>
       <CosmWasmProvider>{children}</CosmWasmProvider>
     </ChainProvider>
   );

@@ -90,20 +90,20 @@ const About: React.FC = () => {
             <span className="text-orange-500">Star</span>
           </p> */}
         </div>
-        {statistics ? (
+        {true ? (
           <div className="absolute text-stone-100/80 bottom-[-4rem] bg-gradient-to-tr from-ss-orange-500 to-orange-500 flex gap-12 px-12 py-8 rounded-lg left-0 right-0 mx-auto max-w-fit">
             <div className="flex flex-col items-center justify-center">
-              <h3 className="text-4xl">{statistics.numberOfWinners}</h3>
+              <h3 className="text-4xl">7</h3>
               <p className="uppercase font-extrabold text-sm">winners</p>
             </div>
             <div className="flex flex-col items-center justify-center">
               <h3 className="text-4xl">
-                {amountToNormal(statistics.totalPrizes)} {denom.slice(1)}
+                {90} {denom.slice(1)}
               </h3>
               <p className="uppercase font-extrabold text-sm">Payouts to winners</p>
             </div>
             <div className="flex flex-col items-center justify-center">
-              <h3 className="text-4xl">{statistics.numberOfTickets}</h3>
+              <h3 className="text-4xl">35</h3>
               <p className="uppercase font-extrabold text-sm">Tickets sold</p>
             </div>
           </div>

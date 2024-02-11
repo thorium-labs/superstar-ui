@@ -14,8 +14,58 @@ const Home: React.FC = () => {
   const { queryService, chainName } = useCosmWasm();
   const [lastDraw, setLastDraw] = useState<Draw>();
   const [recentDraws, setRecentDraws] = useState<Draw[]>([]);
-  const [recentTickets, setRecentTickets] = useState<Purchase[]>([]);
-  const [recentWinners, setRecentWinners] = useState<Winner[]>([]);
+  const [recentTickets, setRecentTickets] = useState<Purchase[]>([
+    {
+      id: '1',
+      drawId: '1333',
+      buyer: 'juno1h6y8tkceau4d8zyv5aa0fwdj2pa2y0gz2hx0tq',
+      tickets: 3
+    },
+    {
+      id: '2',
+      drawId: '1333',
+      buyer: 'juno1f49xq0rmah39sk58aaxq6gnqcvupee7jgl90tn',
+      tickets: 1
+    },
+    {
+      id: '3',
+      drawId: '1333',
+      buyer: 'juno17a8smrhauph552zkz5864vjafz9pszpeus3ftf',
+      tickets: 7
+    },
+    {
+      id: '4',
+      drawId: '1332',
+      buyer: 'juno1xv9tklw7d82sezh9haa573wufgy59vmwe6xxe5',
+      tickets: 15
+    }
+  ]);
+  const [recentWinners, setRecentWinners] = useState<Winner[]>([
+    {
+      id: '1',
+      drawId: '1333',
+      winner: 'juno1h6y8tkceau4d8zyv5aa0fwdj2pa2y0gz2hx0tq',
+      prize: '1000000ujuno'
+    },
+    {
+      id: '2',
+      drawId: '1333',
+      winner: 'juno1f49xq0rmah39sk58aaxq6gnqcvupee7jgl90tn',
+      prize: '5000000ujuno'
+    },
+    {
+      id: '3',
+      drawId: '1333',
+      winner: 'juno17a8smrhauph552zkz5864vjafz9pszpeus3ftf',
+      prize: '3000000ujuno'
+    },
+    {
+      id: '4',
+      drawId: '1332',
+      winner: 'juno1xv9tklw7d82sezh9haa573wufgy59vmwe6xxe5',
+      prize: '9000000ujuno'
+    }
+  ]);
 
   useEffect(() => {
     if (!queryService) return;
@@ -32,8 +82,8 @@ const Home: React.FC = () => {
   }, [queryService]);
 
   useEffect(() => {
-    getRecentPurchases(4).then(setRecentTickets);
-    getRecentWinners(4).then(setRecentWinners);
+    // getRecentPurchases(4).then(setRecentTickets);
+    // getRecentWinners(4).then(setRecentWinners);
   }, []);
 
   return (
