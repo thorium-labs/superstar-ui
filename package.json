@@ -8,6 +8,10 @@
     "build": "tsc && vite build",
     "preview": "vite preview"
   },
+  "engines": {
+    "pnpm": ">=8.0.0",
+    "node": ">=18.0.0"
+  },
   "dependencies": {
     "@chain-registry/types": "^0.18.0",
     "@cosmjs/cosmwasm-stargate": "^0.32.2",
