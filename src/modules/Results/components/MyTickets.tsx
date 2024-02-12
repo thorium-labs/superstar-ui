@@ -94,8 +94,8 @@ const MyTickets: React.FC = () => {
   if (!address) {
     return (
       <div className="min-h-[10rem] w-full flex items-center justify-center flex-col gap-4">
-        <p className="text-stone-400">Please, connect your wallet to see your information</p>
-        <GradientButton className="text-2xl" onClick={connectWallet}>
+        <p className="text-stone-400 text-center">Please, connect your wallet to see your information</p>
+        <GradientButton className="text-2xl" disabled>
           Connect
         </GradientButton>
       </div>
@@ -136,7 +136,7 @@ const MyTickets: React.FC = () => {
       {drawInfo && (
         <div>
           <div className=" flex justify-between items-center mb-4">
-            <p className="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-ss-orange-500/80 to-orange-500/80 ">
+            <p className="text-xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-ss-orange-500/80 to-orange-500/80 ">
               Draw #{drawInfo?.id}
             </p>
             <div className="flex gap-2 justify-center items-center text-xl text-stone-400">

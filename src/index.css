@@ -33,15 +33,15 @@ h6 {
   z-index: 5;
 }
 
-.points-box-vertical::before {
+/* .points-box-vertical::before {
   top: -15px;
   left: -12px;
-}
+} */
 
-.points-box-vertical::after {
+/* .points-box-vertical::after {
   bottom: -15px;
   left: -12px;
-}
+} */
 
 .points-box-horizontal::before {
   top: -10px;

@@ -36,7 +36,7 @@ const Results: React.FC = () => {
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: -10, opacity: 0 }}
           transition={{ duration: 0.2 }}
-          className="w-full p-4"
+          className="w-full md:p-4"
         >
           {currentTab === 'recent-draws' && <RecentDraws />}
           {currentTab === 'my-tickets' && <MyTickets />}

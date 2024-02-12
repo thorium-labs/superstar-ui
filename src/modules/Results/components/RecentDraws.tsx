@@ -8,7 +8,7 @@ import { amountToNormal } from '../../../utils/calculateCoin';
 const BlackBall: React.FC<{ num: number }> = ({ num }) => {
   return (
     <div className="relative">
-      <img src="assets/stone-ball.png" className="w-[3.5rem] h-[3.5rem]" />
+      <img src="assets/stone-ball.png" className="w-[2.5rem] h-[2.5rem] md:w-[3.5rem] md:h-[3.5rem]" />
       <p className="absolute top-0 right-0 left-0 bottom-0 m-auto flex items-center justify-center text-2xl text-stone-50 font-bold">{num}</p>
     </div>
   );
@@ -54,7 +54,7 @@ const RecentDraws: React.FC = () => {
   return (
     <div className="w-full max-w-4xl mx-auto">
       <div className="flex justify-between items-center w-full mb-4">
-        <p className="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-ss-orange-500/80 to-orange-500/80">
+        <p className="text-2xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-ss-orange-500/80 to-orange-500/80">
           Draw #{drawInfo?.id}
         </p>
         <div className="flex gap-2">
@@ -96,7 +96,7 @@ const RecentDraws: React.FC = () => {
               </div>
             </div>
           </div>
-          <div className="rounded-b-lg pt-4 pb-12 px-12 bg-stone-700/20 backdrop-blur w-full flex flex-col ">
+          <div className="rounded-b-lg pt-4 pb-12 px-4 md:px-12 bg-stone-700/20 backdrop-blur w-full flex flex-col ">
             <div className="flex items-center justify-center gap-4">
               <h5 className="text-xl">POT</h5>
               <h3 className="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-ss-orange-500/80 to-orange-500/80 text-center">
@@ -104,7 +104,7 @@ const RecentDraws: React.FC = () => {
               </h3>
               <h5 className="text-xl">{drawInfo.total_prize.denom.slice(1)}</h5>
             </div>
-            <div className="w-full grid grid-cols-3 mt-4 gap-x-4 gap-y-12">
+            <div className="w-full grid grid-cols-2 md:grid-cols-3 mt-4 gap-x-4 gap-y-12">
               {Array.from({ length: 6 }).map((_, i) => {
                 const matchPrize = amountToNormal(drawInfo?.prize_per_match?.[i] as string);
                 const winningTickets = (drawInfo.winners_per_match as number[])[i];
@@ -118,9 +118,9 @@ const RecentDraws: React.FC = () => {
                         return (
                           <React.Fragment key={'balls_' + indexBall}>
                             {indexBall <= i ? (
-                              <img src="assets/orange-ball.png" className="w-[1.5rem]" />
+                              <img src="assets/orange-ball.png" className="w-[1rem] md:w-[1.5rem]" />
                             ) : (
-                              <img src="assets/stone-ball.png" className="w-[1.5rem]" />
+                              <img src="assets/stone-ball.png" className="w-[1rem] md:w-[1.5rem]" />
                             )}
                           </React.Fragment>
                         );

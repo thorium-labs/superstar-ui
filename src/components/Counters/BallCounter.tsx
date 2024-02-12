@@ -1,10 +1,10 @@
-import clsx from "clsx";
-import React, { useCallback, useEffect, useState } from "react";
-import MinArrowDown from "../Icons/MinArrowDown";
-import MinArrowUp from "../Icons/MinArrowUp";
+import clsx from 'clsx';
+import React, { useCallback, useEffect, useState } from 'react';
+import MinArrowDown from '../Icons/MinArrowDown';
+import MinArrowUp from '../Icons/MinArrowUp';
 
-import "./Counters.css";
-import StarBall from "../StarBall/StarBall";
+import './Counters.css';
+import StarBall from '../StarBall/StarBall';
 
 interface Props {
   initialValue: number;
@@ -12,9 +12,7 @@ interface Props {
   singlePos: number;
 }
 
-const BallCounter: React.FC<
-  Props & React.HtmlHTMLAttributes<HTMLDivElement>
-> = ({ changeNum, initialValue, className, singlePos }) => {
+const BallCounter: React.FC<Props & React.HtmlHTMLAttributes<HTMLDivElement>> = ({ changeNum, initialValue, className, singlePos }) => {
   let [count, setCount] = useState<number>(initialValue);
 
   const minus = useCallback(() => {
@@ -32,18 +30,13 @@ const BallCounter: React.FC<
   }, [count]);
 
   return (
-    <div
-      className={clsx(
-        "ball-count flex gap-1 flex-col items-center justify-center ",
-        className && className
-      )}
-    >
+    <div className={clsx('ball-count flex gap-1 flex-col items-center justify-center ', className && className)}>
       <button className="arrow outline-none opacity-50" onClick={plus}>
-        <MinArrowUp />
+        <MinArrowUp className="w-8 h-8 md:w-6 md:h-6" />
       </button>
-      <StarBall num={count} font="xl" width="4rem" />
+      <StarBall num={count} />
       <button className="arrow outline-none opacity-50" onClick={minus}>
-        <MinArrowDown />
+        <MinArrowDown className="w-8 h-8 md:w-6 md:h-6" />
       </button>
     </div>
   );
