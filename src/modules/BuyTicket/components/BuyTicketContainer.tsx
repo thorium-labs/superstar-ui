@@ -18,19 +18,19 @@ const BuyTicketContainer: React.FC<Props> = ({ ticketNumber, setTicketNumber, ti
   };
 
   return (
-    <div className="flex relative flex-col lg:flex-row">
-      <div className="p-2 lg:min-w-[15rem] rounded-xl flex items-center justify-center flex-col bg-stone-700/30 backdrop-blur">
+    <div className="flex relative flex-col md:flex-row">
+      <div className="p-2 md:min-w-[15rem] rounded-xl flex items-center justify-center flex-col bg-stone-700/30 backdrop-blur">
         <p className="font-bold text-xs text-stone-100">DRAW</p>
         <p className="text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-ss-orange-500/80 to-orange-500/80">
           {draw?.id}
         </p>
       </div>
-      <div className=" points-box points-box-vertical absolute z-50 w-full lg:w-auto flex lg:flex-col justify-between lg:h-full lg:left-[14.8rem] top-[5.5rem] lg:top-auto before:top-[-10px] before:left-[-12px] lg:before:top-[-15px] after:bottom-[-10px] after:right-[-12px] lg:after:bottom-[-15px] lg:after:right-auto lg:after:left-[-12px]">
+      <div className=" points-box points-box-vertical absolute z-50 w-full md:w-auto flex md:flex-col justify-between md:h-full md:left-[14.8rem] top-[5.5rem] md:top-auto before:top-[-10px] before:left-[-12px] md:before:top-[-15px] after:bottom-[-10px] after:right-[-12px] md:after:bottom-[-15px] md:after:right-auto md:after:left-[-12px]">
         {Array.from({ length: 12 }).map((e, i) => (
-          <span key={`span${i}`} className="lg:h-[6px] lg:w-[6px] h-[8px] w-[8px] bg-ss-bg block rounded-full" />
+          <span key={`span${i}`} className="md:h-[6px] md:w-[6px] h-[8px] w-[8px] bg-ss-bg block rounded-full" />
         ))}
       </div>
-      <div className=" max-w-fit py-2 px-4 lg:px-12 flex flex-1 gap-2 lg:gap-4 items-center justify-center rounded-xl relative bg-gradient-to-bl from-ss-orange-500/80 to-orange-500/80 backdrop-blur">
+      <div className=" max-w-fit py-2 px-4 md:px-12 flex flex-1 gap-2 md:gap-4 items-center justify-center rounded-xl relative bg-gradient-to-bl from-ss-orange-500/80 to-orange-500/80 backdrop-blur">
         <BallCounter initialValue={+ticketNumbers[0]} changeNum={changeSingleNumber} singlePos={0} />
         <BallCounter initialValue={+ticketNumbers[1]} changeNum={changeSingleNumber} singlePos={1} />
         <BallCounter initialValue={+ticketNumbers[2]} changeNum={changeSingleNumber} singlePos={2} />

@@ -51,7 +51,7 @@ const BuyTicket: React.FC = () => {
       <DrawContainer draw={draw as Draw} />
       <h1 className="w-full text-5xl">Buy tickets</h1>
       <div className="flex flex-col-reverse gap-4 lg:flex-row w-full">
-        <div className="max-w-[800px]">
+        <div className="lg:max-w-[800px]">
           <div className="rounded-lg border border-stone-600/50 flex items-center justify-between p-2">
             <SimpleCounter addTicket={addTicket} removeTicket={removeTicket} maxNumber={25} initialValue={ticketAmount} minNumber={1} />
             <h4>ADD TICKETS</h4>
@@ -74,7 +74,7 @@ const BuyTicket: React.FC = () => {
           </div>
         </div>
         <div className="lg:sticky relative lg:top-[9rem] mt-14 lg:mt-0 flex-1 h-fit w-full">
-          <div className="p-4 bg-stone-700/30 backdrop-blur rounded-xl h-fit flex flex-col gap-4 z-10 md:absolute w-full">
+          <div className="p-4 bg-stone-700/30 backdrop-blur rounded-xl h-fit flex flex-col gap-4 z-10 lg:absolute w-full">
             <h2 className="text-3xl font-bold">Payment</h2>
             <span className="block bg-stone-500 w-full h-[2px] rounded-lg" />
             <div className="flex justify-between">

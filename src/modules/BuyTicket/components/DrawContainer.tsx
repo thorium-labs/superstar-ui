@@ -16,9 +16,9 @@ const DrawContainer: React.FC<{ draw: Draw }> = ({ draw }) => {
 
   return (
     <div className="relative mt-10 mb-16 mx-auto ">
-      <div className="rounded-xl  flex items-center justify-center gap-8 bg-stone-700/30 backdrop-blur-sm px-8 relative z-20">
-        <div className="max-w-[35%] flex flex-col items-center justify-between gap-4 p-4 min-h-[15rem] pl-8">
-          <p className="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-ss-orange-500/80 to-orange-500/80">
+      <div className="rounded-xl flex items-center justify-center flex-col md:flex-row gap-8 bg-stone-700/30 backdrop-blur-sm px-8 relative z-20">
+        <div className="lg:max-w-[35%] flex flex-col items-center justify-between gap-4 p-4 md:min-h-[15rem] md:pl-8">
+          <p className="text-2xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-ss-orange-500/80 to-orange-500/80">
             Draw #{draw?.id}
           </p>
           {timeLeft.hours === 0 && timeLeft.minutes === 0 && timeLeft.seconds === 0 && false ? (
@@ -48,8 +48,8 @@ const DrawContainer: React.FC<{ draw: Draw }> = ({ draw }) => {
             </div>
           </div>
         </div>
-        <span className="block w-[2px] h-[5rem] bg-stone-400" />
-        <div className="max-w-[60%] min-h-[15rem] flex-1 p-4">
+        <span className="block w-[5rem] h-[2px] md:w-[2px] md:h-[5rem] bg-stone-400" />
+        <div className="md:max-w-[60%] min-h-[15rem] flex-1 p-4">
           <div className="flex items-center justify-center gap-4 w-full">
             <h6 className="text-xl">POT</h6>
             <h3 className="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-ss-orange-500/80 to-orange-500/80 text-center">
@@ -57,7 +57,7 @@ const DrawContainer: React.FC<{ draw: Draw }> = ({ draw }) => {
             </h3>
             <h6 className="text-xl">{balance?.denom.slice(1)}</h6>
           </div>
-          <div className="w-full grid grid-cols-3 mt-4 gap-4">
+          <div className="w-full grid  grid-cols-2 lg:grid-cols-3 mt-4 gap-4">
             {Array.from({ length: 6 }).map((_, i) => {
               return (
                 <div className="flex items-center justify-center flex-col" key={`matchContainer${i}`}>
@@ -67,9 +67,9 @@ const DrawContainer: React.FC<{ draw: Draw }> = ({ draw }) => {
                       return (
                         <React.Fragment key={'balls_' + indexBall}>
                           {indexBall <= i ? (
-                            <img src="assets/orange-ball.png" className="w-[1.2rem]" />
+                            <img src="assets/orange-ball.png" className="w-[0.9rem] lg:w-[1.2rem]" />
                           ) : (
-                            <img src="assets/stone-ball.png" className="w-[1.2rem]" />
+                            <img src="assets/stone-ball.png" className="w-[0.9rem] lg:w-[1.2rem]" />
                           )}
                         </React.Fragment>
                       );
