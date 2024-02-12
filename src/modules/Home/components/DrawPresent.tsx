@@ -66,7 +66,7 @@ const DrawPresent: React.FC<Props> = ({ draw }) => {
       </div>
       <img
         src="/assets/orange-ball.png"
-        className="w-[5rem] md:w-[7rem] absolute top-[-3rem] left-[-1rem] md:left-[-2.5rem] animate-floating-2 "
+        className="w-[5rem] lg:w-[7rem] absolute top-[-3rem] left-[-1rem] md:left-[-2.5rem] animate-floating-2 "
       />
       <img src="/assets/ss-orange-star-front.png" className="w-[3rem] absolute top-[19rem] md:top-[1rem] left-[2rem] md:left-[6rem] " />
       <img src="/assets/ss-orange-star-front.png" className="w-[2.5rem] absolute top-[0.5rem] md:top-[1rem] md:left-[6rem] left-[3rem] " />

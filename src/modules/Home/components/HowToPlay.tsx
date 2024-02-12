@@ -38,10 +38,18 @@ const HowToPlay: React.FC = () => {
             <React.Fragment key={'how_to_play_' + index}>
               <div className="flex justify-center items-center">
                 {Array.from({ length: 6 - index }, (_, i) => (
-                  <img key={'how_to_play_orange_ball_' + index + i} src="assets/orange-ball.png" className="w-[2rem] h-[2rem]" />
+                  <img
+                    key={'how_to_play_orange_ball_' + index + i}
+                    src="assets/orange-ball.png"
+                    className="w-[1.5rem] h-[1.5rem] lg:w-[2rem] lg:h-[2rem]"
+                  />
                 ))}
                 {Array.from({ length: index }, (_, i) => (
-                  <img key={'how_to_play_orange_ball_' + index + i} src="assets/stone-ball.png" className="w-[2rem] h-[2rem]" />
+                  <img
+                    key={'how_to_play_orange_ball_' + index + i}
+                    src="assets/stone-ball.png"
+                    className="w-[1.5rem] h-[1.5rem] lg:w-[2rem] lg:h-[2rem]"
+                  />
                 ))}
               </div>
               <div className="text-transparent bg-clip-text bg-gradient-to-r from-ss-orange-500/80 to-orange-500/80 text-2xl font-semibold uppercase text-center">

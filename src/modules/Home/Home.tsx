@@ -103,9 +103,9 @@ const Home: React.FC = () => {
         </div>
       </div>
       <DrawPresent draw={lastDraw} />
-      <div className="flex flex-col gap-8">
+      <div className="flex flex-col gap-8 px-8 sm:px-0">
         <h2 className="text-3xl">Recent Draws</h2>
-        <div className="grid grid-cols-auto-250 md:[&>*:nth-child(4)]:hidden lg:[&>*:nth-child(4)]:flex gap-6 ">
+        <div className="grid grid-cols-auto-250 sm:[&>*:nth-child(4)]:hidden md:[&>*:nth-child(4)]:flex gap-6 ">
           {recentDraws.map((draw) => (
             <RecentDrawsCard key={draw.id} draw={draw} />
           ))}
